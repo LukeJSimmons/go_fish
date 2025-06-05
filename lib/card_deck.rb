@@ -21,7 +21,7 @@ class CardDeck
     cards == other_deck.cards
   end
 
-  # private
+  private
 
   def build_cards
     Card::SUITS.flat_map do |suit|
