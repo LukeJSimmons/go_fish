@@ -14,7 +14,7 @@ class FishPlayer
     hand.sample # Will eventually request input from the client
   end
 
-  def get_matching_card(card_request)
+  def get_matching_cards(card_request)
     hand.select { |card| card.rank == card_request.rank }
   end
 
