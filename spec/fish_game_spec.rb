@@ -1,4 +1,5 @@
 require 'fish_game'
+require 'card_deck'
 
 describe 'FishGame' do
   let(:game) { FishGame.new }
@@ -21,6 +22,20 @@ describe 'FishGame' do
 
     it 'players are both FishPlayer objects' do
       expect(game.players.all? { |player| player.respond_to? :hand }).to eq true
+    end
+  end
+
+  describe '#start' do
+    it 'shuffles the deck' do
+      unshuffled_deck = CardDeck.new
+      expect(game.deck).to eq unshuffled_deck
+      game.start
+      expect(game.deck).to_not eq unshuffled_deck
+    end
+
+    it 'deals 7 cards to each player' do
+      game.start
+      expect(game.players.all? { |player| player.hand.count == 5 }).to eq true
     end
   end
 end

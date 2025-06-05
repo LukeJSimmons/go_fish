@@ -7,4 +7,8 @@ class FishGame
     @deck = CardDeck.new
     @players = Array.new(2, FishPlayer.new)
   end
+
+  def start
+    deck.shuffle!
+  end
 end
