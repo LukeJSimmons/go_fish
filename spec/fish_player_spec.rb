@@ -9,6 +9,10 @@ describe 'FishPlayer' do
       expect(player).to respond_to :hand
     end
 
+    it 'has books' do
+      expect(player).to respond_to :books
+    end
+
     it 'has a name' do
       expect(player).to respond_to :name
     end
@@ -42,7 +46,6 @@ describe 'FishPlayer' do
       player.add_card_to_hand(Card.new('Q','H'))
     end
     it 'returns a card from hand' do
-      binding.irb
       expect(player.hand).to include player.request_card
     end
   end
@@ -60,6 +63,36 @@ describe 'FishPlayer' do
     it 'returns an empty array if no matching cards' do
       card_request = Card.new('9','C')
       expect(player.get_matching_cards(card_request)).to eq []
+    end
+  end
+
+  describe '#has_book?' do
+    context 'when player does not have book' do
+      before do
+        player.add_card_to_hand(Card.new('A','H'))
+      end
+
+      it 'should return an empty array' do
+        expect(player.has_book?).to eq nil
+      end
+    end
+
+    context 'when player does have a book' do
+      before do
+        player.add_card_to_hand(Card.new('A','H'))
+        player.add_card_to_hand(Card.new('A','D'))
+        player.add_card_to_hand(Card.new('A','C'))
+        player.add_card_to_hand(Card.new('A','S'))
+      end
+
+      it 'should return array of matching cards' do
+        expect(player.has_book?).to match_array [
+          Card.new('A','H'),
+          Card.new('A','D'),
+          Card.new('A','C'),
+          Card.new('A','S')
+        ]
+      end
     end
   end
 end
