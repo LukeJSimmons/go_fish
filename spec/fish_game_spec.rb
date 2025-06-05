@@ -76,6 +76,12 @@ describe 'FishGame' do
         expect(game.current_opponent.hand.count).to eq 1
       end
 
+      it 'player should draw a card' do
+        expect {
+          game.play_round
+        }.to change(game.current_player.hand, :count).by 1
+      end
+
       it 'should swap turns' do
         game.play_round
         expect(game.current_player).to eq game.players[1]
