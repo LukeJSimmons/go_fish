@@ -17,8 +17,4 @@ class FishPlayer
   def get_matching_cards(card_request)
     hand.select { |card| card.rank == card_request.rank }
   end
-
-  def has_card?(card)
-    hand.include?(card)
-  end
 end
