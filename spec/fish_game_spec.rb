@@ -95,6 +95,20 @@ describe 'FishGame' do
     end
   end
 
+  describe '#determine_winner' do
+    before do
+      game.start
+      game.play_game
+    end
+    it 'returns the player 1 if he has most books' do
+      expect(game.determine_winner).to eq game.players.first
+    end
+
+    it 'returns the player 2 if he has most books' do
+      expect(game.determine_winner).to eq game.players[1]
+    end
+  end
+
   describe '#current_player' do
     it 'should return Player 1 on first round' do
       expect(game.current_player).to eq game.players.first

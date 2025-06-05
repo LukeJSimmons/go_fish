@@ -70,10 +70,13 @@ describe 'FishPlayer' do
     context 'when player does not have book' do
       before do
         player.add_card_to_hand(Card.new('A','H'))
+        player.add_card_to_hand(Card.new('A','C'))
+        player.add_card_to_hand(Card.new('A','D'))
+        player.add_card_to_hand(Card.new('10','S'))
       end
 
       it 'should return an empty array' do
-        expect(player.has_book?).to eq nil
+        expect(player.has_book?).to eq []
       end
     end
 
@@ -92,6 +95,39 @@ describe 'FishPlayer' do
           Card.new('A','C'),
           Card.new('A','S')
         ]
+      end
+    end
+  end
+
+  describe '#check_for_book' do
+    context 'when player does have book' do
+      before do
+        player.add_card_to_hand(Card.new('A','H'))
+        player.add_card_to_hand(Card.new('A','D'))
+        player.add_card_to_hand(Card.new('A','C'))
+        player.add_card_to_hand(Card.new('A','S'))
+      end
+
+      it 'removes the book from the hand' do
+        binding.irb
+        expect {
+          player.check_for_book
+        }.to change(player.hand, :count).by (-4)
+      end
+    end
+
+    context 'when player does not have book' do
+      before do
+        player.add_card_to_hand(Card.new('A','H'))
+        player.add_card_to_hand(Card.new('A','D'))
+        player.add_card_to_hand(Card.new('A','C'))
+        player.add_card_to_hand(Card.new('10','S'))
+      end
+
+      it 'does not remove the book from the hand' do
+        expect {
+          player.check_for_book
+        }.to_not change(player.hand, :count)
       end
     end
   end

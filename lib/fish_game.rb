@@ -36,6 +36,11 @@ class FishGame
     end
   end
 
+  def determine_winner
+    total_books = players.map { |player| player.books.length }
+    total_books.max
+  end
+
   def swap_turns
     self.current_player, self.current_opponent = current_opponent, current_player
   end

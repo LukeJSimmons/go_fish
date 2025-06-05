@@ -21,14 +21,19 @@ class FishPlayer
     matching_cards
   end
 
-  def has_book?
-    matching_cards = []
+  def check_for_book
+    book = has_book?
     hand.each do |card|
-      matching_cards = hand.select do |other_card|
-        card.rank == other_card.rank && card.suit != other_card.suit
-      matching_cards
+      hand.delete(card) if book.include? card
+    end
+  end
+
+  def has_book?
+    ranks = Card::RANKS.map do |rank|
+      hand.select do |card|
+        card.rank == rank
       end
     end
-    matching_cards if matching_cards.count == 4
+    ranks.select { |rank| rank.count == 4 }.flatten
   end
 end
