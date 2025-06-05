@@ -20,8 +20,7 @@ class FishGame
 
   def deal_base_hands
     BASE_HAND_SIZE.times do
-      players[0].add_card_to_hand(deck.draw_card)
-      players[1].add_card_to_hand(deck.draw_card)
+      players.each { |player| player.add_card_to_hand(deck.draw_card) }
     end
   end
 end
