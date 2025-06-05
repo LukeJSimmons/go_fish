@@ -23,7 +23,25 @@ describe 'CardDeck' do
     end
 
     it 'removes the last card from cards' do
-      expect(deck.draw_card).to eq deck.cards.last
+      last_card = deck.cards.last
+      expect(deck.draw_card).to eq last_card
+    end
+  end
+
+  describe '#shuffle!' do
+    it 'returns an array with size of cards array' do
+      expect(deck.shuffle!.count).to eq deck.cards.count
+    end
+    
+    it 'returns an array of Card objects' do
+      expect(deck.shuffle!.all? { |card| card.respond_to?(:rank) }).to eq true
+    end
+
+    it 'returns a different array than cards' do
+      unshuffled_deck = CardDeck.new
+      expect(deck).to eq unshuffled_deck
+      deck.shuffle!
+      expect(deck).to_not eq unshuffled_deck
     end
   end
 end
