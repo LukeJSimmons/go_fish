@@ -34,4 +34,13 @@ describe 'FishPlayer' do
       expect(player.hand.first).to eq new_card
     end
   end
+
+  describe '#request_card' do
+    before do
+      player.add_card_to_hand(Card.new('A','H'))
+    end
+    it 'returns a card from hand' do
+      expect(player.hand).to include player.request_card
+    end
+  end
 end
