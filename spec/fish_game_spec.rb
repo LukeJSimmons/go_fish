@@ -12,6 +12,10 @@ describe 'FishGame' do
       expect(game.deck).to respond_to :cards
     end
 
+    it 'deck has BASE_DECK_SIZE cards' do
+      expect(game.deck.cards.count).to eq BASE_DECK_SIZE
+    end
+
     it 'has players' do
       expect(game).to respond_to :players
     end
@@ -35,7 +39,7 @@ describe 'FishGame' do
 
     it 'deals 7 cards to each player' do
       game.start
-      expect(game.players.all? { |player| player.hand.count == 5 }).to eq true
+      expect(game.players.all? { |player| player.hand.count == 7 }).to eq true
     end
   end
 end

@@ -1,7 +1,12 @@
 class FishPlayer
-  attr_reader :hand
+  attr_reader :hand, :name
   
-  def initialize
+  def initialize(name="Random Player")
     @hand = []
+    @name = name
+  end
+
+  def add_card_to_hand(card)
+    hand.unshift card
   end
 end
