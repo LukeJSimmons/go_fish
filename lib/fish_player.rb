@@ -14,6 +14,10 @@ class FishPlayer
     hand.sample # Will eventually request input from the client
   end
 
+  def get_matching_card(card_request)
+    hand.select { |card| card.rank == card_request.rank }
+  end
+
   def has_card?(card)
     hand.include?(card)
   end

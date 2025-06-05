@@ -44,6 +44,22 @@ describe 'FishPlayer' do
     end
   end
 
+  describe '#get_matching_card' do
+    before do
+      player.add_card_to_hand(Card.new('A','H'))
+    end
+
+    it 'returns all matching cards' do
+      card_request = Card.new('A','C')
+      expect(player.get_matching_card(card_request)).to eq [Card.new('A','H')]
+    end
+
+    it 'returns an empty array if no matching cards' do
+      card_request = Card.new('9','C')
+      expect(player.get_matching_card(card_request)).to eq []
+    end
+  end
+
   describe '#has_card?' do
     before do
       player.add_card_to_hand(Card.new('A','H'))
