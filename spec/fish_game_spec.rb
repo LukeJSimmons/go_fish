@@ -83,4 +83,12 @@ describe 'FishGame' do
       expect(game.current_opponent).to eq game.players[1]
     end
   end
+
+  describe '#swap_turns' do
+    it 'swaps current player and current opponent' do
+      game.swap_turns
+      expect(game.current_player).to eq game.players[1]
+      expect(game.current_opponent).to eq game.players[0]
+    end
+  end
 end

@@ -3,12 +3,15 @@ require_relative 'fish_player'
 
 class FishGame
   attr_reader :deck, :players
+  attr_accessor :current_player, :current_opponent
 
   BASE_HAND_SIZE = 7
 
   def initialize
     @deck = CardDeck.new
     @players = [FishPlayer.new("Player 1"), FishPlayer.new("Player 2")]
+    @current_player = players[0]
+    @current_opponent = players[1]
   end
 
   def start
@@ -20,14 +23,11 @@ class FishGame
     card_request = current_player.request_card
     matching_cards = current_opponent.get_matching_cards(card_request)
     matching_cards.each { |card| current_player.add_card_to_hand(card) }
+    
   end
 
-  def current_player
-    players[0]
-  end
-  
-  def current_opponent
-    players[1]
+  def swap_turns
+    self.current_player, self.current_opponent = current_opponent, current_player
   end
 
   private
