@@ -11,6 +11,10 @@ class FishPlayer
   end
 
   def request_card
-    hand.sample
+    hand.sample # Will eventually request input from the client
+  end
+
+  def has_card?(card)
+    hand.include?(card)
   end
 end

@@ -43,4 +43,18 @@ describe 'FishPlayer' do
       expect(player.hand).to include player.request_card
     end
   end
+
+  describe '#has_card?' do
+    before do
+      player.add_card_to_hand(Card.new('A','H'))
+    end
+
+    it 'returns false if player does not have card in hand' do
+      expect(player.has_card?(Card.new('4','H'))).to eq false
+    end
+
+    it 'returns true if player does have card in hand' do
+      expect(player.has_card?(Card.new('A','H'))).to eq true
+    end
+  end
 end
