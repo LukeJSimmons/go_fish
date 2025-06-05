@@ -56,6 +56,12 @@ describe 'FishGame' do
         expect(game.current_player.hand.count).to eq 2
         expect(game.current_opponent.hand.count).to eq 0
       end
+
+      it 'should not swap turns' do
+        game.play_round
+        expect(game.current_player).to eq game.players[0]
+        expect(game.current_opponent).to eq game.players[1]
+      end
     end
 
     context 'when opponent does not have match' do
@@ -68,6 +74,12 @@ describe 'FishGame' do
         game.play_round
         expect(game.current_player.hand.count).to eq 1
         expect(game.current_opponent.hand.count).to eq 1
+      end
+
+      it 'should swap turns' do
+        game.play_round
+        expect(game.current_player).to eq game.players[1]
+        expect(game.current_opponent).to eq game.players[0]
       end
     end
   end
