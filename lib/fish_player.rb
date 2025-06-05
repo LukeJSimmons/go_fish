@@ -15,6 +15,8 @@ class FishPlayer
   end
 
   def get_matching_cards(card_request)
-    hand.select { |card| card.rank == card_request.rank }
+    matching_cards = hand.select { |card| card.rank == card_request.rank }
+    matching_cards.each { |card| hand.delete(card) }
+    matching_cards
   end
 end

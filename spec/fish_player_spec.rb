@@ -38,8 +38,11 @@ describe 'FishPlayer' do
   describe '#request_card' do
     before do
       player.add_card_to_hand(Card.new('A','H'))
+      player.add_card_to_hand(Card.new('10','H'))
+      player.add_card_to_hand(Card.new('Q','H'))
     end
     it 'returns a card from hand' do
+      binding.irb
       expect(player.hand).to include player.request_card
     end
   end

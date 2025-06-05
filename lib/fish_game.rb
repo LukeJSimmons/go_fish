@@ -16,6 +16,20 @@ class FishGame
     deal_base_hands
   end
 
+  def play_round
+    card_request = current_player.request_card
+    matching_cards = current_opponent.get_matching_cards(card_request)
+    matching_cards.each { |card| current_player.add_card_to_hand(card) }
+  end
+
+  def current_player
+    players[0]
+  end
+  
+  def current_opponent
+    players[1]
+  end
+
   private
 
   def deal_base_hands

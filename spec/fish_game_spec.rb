@@ -42,4 +42,45 @@ describe 'FishGame' do
       expect(game.players.all? { |player| player.hand.count == 7 }).to eq true
     end
   end
+
+  describe '#play_round' do
+
+    context 'when opponent does have match' do
+      before do
+        game.current_player.add_card_to_hand(Card.new('A','H'))
+        game.current_opponent.add_card_to_hand(Card.new('A','C'))
+      end
+
+      it "adds A of C to current player's hand" do
+        game.play_round
+        expect(game.current_player.hand.count).to eq 2
+        expect(game.current_opponent.hand.count).to eq 0
+      end
+    end
+
+    context 'when opponent does not have match' do
+      before do
+        game.current_player.add_card_to_hand(Card.new('A','H'))
+        game.current_opponent.add_card_to_hand(Card.new('9','C'))
+      end
+
+      it "both players hand's stay the same" do
+        game.play_round
+        expect(game.current_player.hand.count).to eq 1
+        expect(game.current_opponent.hand.count).to eq 1
+      end
+    end
+  end
+
+  describe '#current_player' do
+    it 'should return Player 1 on first round' do
+      expect(game.current_player).to eq game.players.first
+    end
+  end
+
+  describe '#current_opponent' do
+    it 'should return Player 2 on first round' do
+      expect(game.current_opponent).to eq game.players[1]
+    end
+  end
 end
