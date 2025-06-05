@@ -70,12 +70,6 @@ describe 'FishGame' do
         game.current_opponent.add_card_to_hand(Card.new('9','C'))
       end
 
-      it "both players hand's stay the same" do
-        game.play_round
-        expect(game.current_player.hand.count).to eq 1
-        expect(game.current_opponent.hand.count).to eq 1
-      end
-
       it 'player should draw a card' do
         expect {
           game.play_round
@@ -87,6 +81,17 @@ describe 'FishGame' do
         expect(game.current_player).to eq game.players[1]
         expect(game.current_opponent).to eq game.players[0]
       end
+    end
+  end
+
+  describe '#play_game' do
+    before do
+      game.start
+    end
+
+    it 'plays until the deck is empty' do
+      game.play_game
+      expect(game.deck.cards.count).to eq 0
     end
   end
 

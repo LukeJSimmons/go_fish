@@ -23,9 +23,16 @@ class FishGame
     card_request = current_player.request_card
     matching_cards = current_opponent.get_matching_cards(card_request)
     matching_cards.each { |card| current_player.add_card_to_hand(card) }
+
     if matching_cards.empty?
       current_player.add_card_to_hand(deck.draw_card)
       swap_turns
+    end
+  end
+
+  def play_game
+    until deck.cards.empty?
+      play_round
     end
   end
 
