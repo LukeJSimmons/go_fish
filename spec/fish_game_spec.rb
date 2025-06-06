@@ -72,7 +72,11 @@ describe FishGame do
         end.to change(game.current_player.hand, :count).by 1
       end
 
-      it 'removes a card from the deck'
+      it 'removes a card from the deck' do
+        expect do
+          game.play_round
+        end.to change(game.deck.cards, :count).by (-1)
+      end
 
       context 'when drawn card is not what he requested' do
         before do

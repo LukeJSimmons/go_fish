@@ -25,11 +25,7 @@ class FishGame
     
     return matching_cards unless matching_cards.empty?
 
-    #TODO: Extract to it's own method
-    drawn_card = current_player.add_cards_to_hand(deck.draw_card)
-    return unless request
-    swap_turns unless drawn_card.rank == request.rank
-    drawn_card
+    go_fish(request)
   end
 
   def play_game
@@ -58,5 +54,12 @@ class FishGame
     BASE_HAND_SIZE.times do
       players.each { |player| player.add_cards_to_hand(deck.draw_card) }
     end
+  end
+
+  def go_fish(request)
+    drawn_card = current_player.add_cards_to_hand(deck.draw_card)
+    return unless request
+    swap_turns unless drawn_card.rank == request.rank
+    drawn_card
   end
 end
