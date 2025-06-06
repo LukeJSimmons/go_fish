@@ -28,17 +28,11 @@ class FishPlayer
     book.each do |book_card|
       hand.delete(book_card)
     end
-    add_book_to_books(book)
+    books << book if book_only_contains_cards?(book)
   end
 
   def get_book
     hand.group_by(&:rank).select { |rank, cards| cards.count == 4 }.first&.last || []
-  end
-
-  def add_book_to_books(book)
-    return unless book_only_contains_cards?(book)
-
-    books << book
   end
 
   private

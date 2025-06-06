@@ -48,11 +48,12 @@ describe 'FishPlayer' do
   describe '#request_card' do
     before do
       player.add_cards_to_hand([
-                                 Card.new('A', 'H'),
-                                 Card.new('10', 'H'),
-                                 Card.new('Q', 'H')
-                               ])
+        Card.new('A', 'H'),
+        Card.new('10', 'H'),
+        Card.new('Q', 'H')
+      ])
     end
+    # Eventually move this out to the server
     it 'returns a card from hand' do
       expect(player.hand).to include player.request_card
     end
@@ -78,11 +79,11 @@ describe 'FishPlayer' do
     context 'when player does not have book' do
       before do
         player.add_cards_to_hand([
-                                   Card.new('A', 'H'),
-                                   Card.new('A', 'C'),
-                                   Card.new('A', 'D'),
-                                   Card.new('10', 'S')
-                                 ], false)
+          Card.new('A', 'H'),
+          Card.new('A', 'C'),
+          Card.new('A', 'D'),
+          Card.new('10', 'S')
+        ], false)
       end
 
       it 'should return an empty array' do
@@ -93,11 +94,11 @@ describe 'FishPlayer' do
     context 'when player does have a book' do
       before do
         player.add_cards_to_hand([
-                                   Card.new('A', 'H'),
-                                   Card.new('A', 'C'),
-                                   Card.new('A', 'D'),
-                                   Card.new('A', 'S')
-                                 ], false)
+          Card.new('A', 'H'),
+          Card.new('A', 'C'),
+          Card.new('A', 'D'),
+          Card.new('A', 'S')
+        ], false)
       end
 
       it 'should return array of matching cards' do
@@ -115,11 +116,11 @@ describe 'FishPlayer' do
     context 'when player does have book' do
       before do
         player.add_cards_to_hand([
-                                   Card.new('A', 'H'),
-                                   Card.new('A', 'C'),
-                                   Card.new('A', 'D'),
-                                   Card.new('A', 'S')
-                                 ], false)
+          Card.new('A', 'H'),
+          Card.new('A', 'C'),
+          Card.new('A', 'D'),
+          Card.new('A', 'S')
+        ], false)
       end
 
       it 'removes the book from the hand' do
@@ -138,11 +139,11 @@ describe 'FishPlayer' do
     context 'when player does not have book' do
       before do
         player.add_cards_to_hand([
-                                   Card.new('A', 'H'),
-                                   Card.new('A', 'C'),
-                                   Card.new('A', 'D'),
-                                   Card.new('A', 'S')
-                                 ])
+          Card.new('A', 'H'),
+          Card.new('A', 'C'),
+          Card.new('A', 'D'),
+          Card.new('2', 'S')
+        ], false)
       end
 
       it 'does not remove the book from the hand' do
@@ -150,37 +151,6 @@ describe 'FishPlayer' do
           player.check_for_book
         end.to_not change(player.hand, :count)
       end
-    end
-  end
-
-  describe '#add_book_to_books' do
-    let(:valid_book) do
-      [
-        Card.new('A', 'H'),
-        Card.new('A', 'D'),
-        Card.new('A', 'C'),
-        Card.new('A', 'S')
-      ]
-    end
-    let(:invalid_book) do
-      [
-        [],
-        [],
-        Card.new('A', 'H'),
-        Card.new('A', 'D')
-      ]
-    end
-
-    it 'adds a valid book to books array' do
-      expect do
-        player.add_book_to_books(valid_book)
-      end.to change(player.books, :count).by 1
-    end
-
-    it 'does not add an invalid book to books array' do
-      expect do
-        player.add_book_to_books(invalid_book)
-      end.to_not change(player.books, :count)
     end
   end
 end
