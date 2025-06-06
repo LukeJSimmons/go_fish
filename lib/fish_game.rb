@@ -9,7 +9,7 @@ class FishGame
 
   def initialize
     @deck = CardDeck.new
-    @players = [FishPlayer.new("Player 1"), FishPlayer.new("Player 2")]
+    @players = [FishPlayer.new('Player 1'), FishPlayer.new('Player 2')]
     @current_player = players[0]
     @current_opponent = players[1]
   end
@@ -24,16 +24,14 @@ class FishGame
     matching_cards = card_request ? current_opponent.get_matching_cards(card_request) : []
     matching_cards.each { |card| current_player.add_cards_to_hand(card) }
 
-    if matching_cards.empty?
-      current_player.add_cards_to_hand(deck.draw_card)
-      swap_turns
-    end
+    return unless matching_cards.empty?
+
+    current_player.add_cards_to_hand(deck.draw_card)
+    swap_turns
   end
 
   def play_game
-    until deck.cards.empty?
-      play_round
-    end
+    play_round until deck.cards.empty?
     determine_winner
   end
 

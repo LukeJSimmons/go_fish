@@ -1,13 +1,13 @@
 class FishPlayer
   attr_reader :hand, :name, :books
-  
-  def initialize(name="Random Player")
+
+  def initialize(name = 'Random Player')
     @name = name
     @hand = []
     @books = []
   end
 
-  def add_cards_to_hand(cards, check_book=true)
+  def add_cards_to_hand(cards, check_book = true)
     hand.unshift(*Array(cards))
     check_for_book if check_book
   end
@@ -38,9 +38,10 @@ class FishPlayer
     end
     ranks.select { |rank| rank.count == 4 }.flatten
   end
-  
+
   def add_book_to_books(book)
     return unless book_only_contains_cards?(book)
+
     books << book
   end
 

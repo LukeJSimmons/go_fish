@@ -25,21 +25,21 @@ describe 'FishPlayer' do
 
   describe '#add_cards_to_hand' do
     it 'increases hand size by one' do
-      expect {
-        player.add_cards_to_hand(Card.new('A','H'))
-      }.to change(player.hand, :count).by 1
+      expect do
+        player.add_cards_to_hand(Card.new('A', 'H'))
+      end.to change(player.hand, :count).by 1
     end
 
     it 'adds a Card object to front of hand' do
-      player.add_cards_to_hand(Card.new('10','C'))
+      player.add_cards_to_hand(Card.new('10', 'C'))
 
-      new_card = Card.new('A','H')
+      new_card = Card.new('A', 'H')
       player.add_cards_to_hand(new_card)
       expect(player.hand.first).to eq new_card
     end
 
     it 'can add multiple Card objects at once' do
-      new_cards = [Card.new('10','C'),Card.new('2','C')]
+      new_cards = [Card.new('10', 'C'), Card.new('2', 'C')]
       player.add_cards_to_hand(new_cards)
       expect(player.hand).to eq new_cards
     end
@@ -48,10 +48,10 @@ describe 'FishPlayer' do
   describe '#request_card' do
     before do
       player.add_cards_to_hand([
-        Card.new('A','H'),
-        Card.new('10','H'),
-        Card.new('Q','H')
-      ])
+                                 Card.new('A', 'H'),
+                                 Card.new('10', 'H'),
+                                 Card.new('Q', 'H')
+                               ])
     end
     it 'returns a card from hand' do
       expect(player.hand).to include player.request_card
@@ -60,16 +60,16 @@ describe 'FishPlayer' do
 
   describe '#get_matching_card' do
     before do
-      player.add_cards_to_hand(Card.new('A','H'))
+      player.add_cards_to_hand(Card.new('A', 'H'))
     end
 
     it 'returns all matching cards' do
-      card_request = Card.new('A','C')
-      expect(player.get_matching_cards(card_request)).to eq [Card.new('A','H')]
+      card_request = Card.new('A', 'C')
+      expect(player.get_matching_cards(card_request)).to eq [Card.new('A', 'H')]
     end
 
     it 'returns an empty array if no matching cards' do
-      card_request = Card.new('9','C')
+      card_request = Card.new('9', 'C')
       expect(player.get_matching_cards(card_request)).to eq []
     end
   end
@@ -78,11 +78,11 @@ describe 'FishPlayer' do
     context 'when player does not have book' do
       before do
         player.add_cards_to_hand([
-          Card.new('A','H'),
-          Card.new('A','C'),
-          Card.new('A','D'),
-          Card.new('10','S')
-        ],false)
+                                   Card.new('A', 'H'),
+                                   Card.new('A', 'C'),
+                                   Card.new('A', 'D'),
+                                   Card.new('10', 'S')
+                                 ], false)
       end
 
       it 'should return an empty array' do
@@ -93,19 +93,19 @@ describe 'FishPlayer' do
     context 'when player does have a book' do
       before do
         player.add_cards_to_hand([
-          Card.new('A','H'),
-          Card.new('A','C'),
-          Card.new('A','D'),
-          Card.new('A','S')
-        ],false)
+                                   Card.new('A', 'H'),
+                                   Card.new('A', 'C'),
+                                   Card.new('A', 'D'),
+                                   Card.new('A', 'S')
+                                 ], false)
       end
 
       it 'should return array of matching cards' do
         expect(player.has_book?).to match_array [
-          Card.new('A','H'),
-          Card.new('A','D'),
-          Card.new('A','C'),
-          Card.new('A','S')
+          Card.new('A', 'H'),
+          Card.new('A', 'D'),
+          Card.new('A', 'C'),
+          Card.new('A', 'S')
         ]
       end
     end
@@ -115,72 +115,72 @@ describe 'FishPlayer' do
     context 'when player does have book' do
       before do
         player.add_cards_to_hand([
-          Card.new('A','H'),
-          Card.new('A','C'),
-          Card.new('A','D'),
-          Card.new('A','S')
-        ],false)
+                                   Card.new('A', 'H'),
+                                   Card.new('A', 'C'),
+                                   Card.new('A', 'D'),
+                                   Card.new('A', 'S')
+                                 ], false)
       end
 
       it 'removes the book from the hand' do
-        expect {
+        expect do
           player.check_for_book
-        }.to change(player.hand, :count).by (-4)
+        end.to change(player.hand, :count).by(-4)
       end
 
       it 'adds the book to books' do
-        expect {
+        expect do
           player.check_for_book
-        }.to change(player.books, :count).by 1
+        end.to change(player.books, :count).by 1
       end
     end
 
     context 'when player does not have book' do
       before do
-       player.add_cards_to_hand([
-          Card.new('A','H'),
-          Card.new('A','C'),
-          Card.new('A','D'),
-          Card.new('A','S')
-        ])
+        player.add_cards_to_hand([
+                                   Card.new('A', 'H'),
+                                   Card.new('A', 'C'),
+                                   Card.new('A', 'D'),
+                                   Card.new('A', 'S')
+                                 ])
       end
 
       it 'does not remove the book from the hand' do
-        expect {
+        expect do
           player.check_for_book
-        }.to_not change(player.hand, :count)
+        end.to_not change(player.hand, :count)
       end
     end
   end
 
   describe '#add_book_to_books' do
-    let(:valid_book) {
+    let(:valid_book) do
       [
-        Card.new('A','H'),
-        Card.new('A','D'),
-        Card.new('A','C'),
-        Card.new('A','S')
+        Card.new('A', 'H'),
+        Card.new('A', 'D'),
+        Card.new('A', 'C'),
+        Card.new('A', 'S')
       ]
-    }
-    let(:invalid_book) {
+    end
+    let(:invalid_book) do
       [
         [],
         [],
-        Card.new('A','H'),
-        Card.new('A','D')
+        Card.new('A', 'H'),
+        Card.new('A', 'D')
       ]
-    }
+    end
 
     it 'adds a valid book to books array' do
-      expect {
+      expect do
         player.add_book_to_books(valid_book)
-      }.to change(player.books, :count).by 1
+      end.to change(player.books, :count).by 1
     end
 
     it 'does not add an invalid book to books array' do
-      expect {
+      expect do
         player.add_book_to_books(invalid_book)
-      }.to_not change(player.books, :count)
+      end.to_not change(player.books, :count)
     end
   end
 end

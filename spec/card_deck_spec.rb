@@ -19,7 +19,7 @@ describe 'CardDeck' do
 
   describe '#draw_card' do
     it 'removes a card from cards' do
-      expect { deck.draw_card }.to change(deck.cards, :count).by (-1)
+      expect { deck.draw_card }.to change(deck.cards, :count).by(-1)
     end
 
     it 'removes the last card from cards' do
@@ -32,7 +32,7 @@ describe 'CardDeck' do
     it 'returns an array with size of cards array' do
       expect(deck.shuffle!.count).to eq deck.cards.count
     end
-    
+
     it 'returns an array of Card objects' do
       expect(deck.shuffle!.all? { |card| card.respond_to?(:rank) }).to eq true
     end

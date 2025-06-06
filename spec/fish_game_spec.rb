@@ -44,11 +44,10 @@ describe 'FishGame' do
   end
 
   describe '#play_round' do
-
     context 'when opponent does have match' do
       before do
-        game.current_player.add_cards_to_hand(Card.new('A','H'))
-        game.current_opponent.add_cards_to_hand(Card.new('A','C'))
+        game.current_player.add_cards_to_hand(Card.new('A', 'H'))
+        game.current_opponent.add_cards_to_hand(Card.new('A', 'C'))
       end
 
       it "adds A of C to current player's hand" do
@@ -66,14 +65,14 @@ describe 'FishGame' do
 
     context 'when opponent does not have match' do
       before do
-        game.current_player.add_cards_to_hand(Card.new('A','H'))
-        game.current_opponent.add_cards_to_hand(Card.new('9','C'))
+        game.current_player.add_cards_to_hand(Card.new('A', 'H'))
+        game.current_opponent.add_cards_to_hand(Card.new('9', 'C'))
       end
 
       it 'player should draw a card' do
-        expect {
+        expect do
           game.play_round
-        }.to change(game.current_player.hand, :count).by 1
+        end.to change(game.current_player.hand, :count).by 1
       end
 
       it 'should swap turns' do
@@ -120,11 +119,11 @@ describe 'FishGame' do
     context 'when player 1 has the most books' do
       before do
         game.players.first.add_cards_to_hand([
-          Card.new('A','H'),
-          Card.new('A','D'),
-          Card.new('A','C'),
-          Card.new('A','S')
-        ])
+                                               Card.new('A', 'H'),
+                                               Card.new('A', 'D'),
+                                               Card.new('A', 'C'),
+                                               Card.new('A', 'S')
+                                             ])
       end
 
       it 'returns the player 1' do
@@ -135,17 +134,17 @@ describe 'FishGame' do
     context 'when player 2 has the most books' do
       before do
         game.players[1].add_cards_to_hand([
-          Card.new('A','H'),
-          Card.new('A','D'),
-          Card.new('A','C'),
-          Card.new('A','S'),
-          Card.new('9','H'),
-          Card.new('9','D'),
-          Card.new('9','C'),
-          Card.new('9','S'),
-        ])
+                                            Card.new('A', 'H'),
+                                            Card.new('A', 'D'),
+                                            Card.new('A', 'C'),
+                                            Card.new('A', 'S'),
+                                            Card.new('9', 'H'),
+                                            Card.new('9', 'D'),
+                                            Card.new('9', 'C'),
+                                            Card.new('9', 'S')
+                                          ])
       end
-      
+
       it 'returns the player 2 if he has most books' do
         expect(game.determine_winner).to eq game.players[1]
       end
@@ -155,17 +154,17 @@ describe 'FishGame' do
       context 'when player 1 has highest rank book' do
         before do
           game.players.first.add_cards_to_hand([
-            Card.new('A','H'),
-            Card.new('A','D'),
-            Card.new('A','C'),
-            Card.new('A','S')
-          ])
+                                                 Card.new('A', 'H'),
+                                                 Card.new('A', 'D'),
+                                                 Card.new('A', 'C'),
+                                                 Card.new('A', 'S')
+                                               ])
           game.players[1].add_cards_to_hand([
-            Card.new('2','H'),
-            Card.new('2','D'),
-            Card.new('2','C'),
-            Card.new('2','S')
-          ])
+                                              Card.new('2', 'H'),
+                                              Card.new('2', 'D'),
+                                              Card.new('2', 'C'),
+                                              Card.new('2', 'S')
+                                            ])
         end
         it 'returns player 1' do
           expect(game.determine_winner).to eq game.players.first
@@ -175,17 +174,17 @@ describe 'FishGame' do
       context 'when player 2 has highest rank book' do
         before do
           game.players.first.add_cards_to_hand([
-            Card.new('2','H'),
-            Card.new('2','D'),
-            Card.new('2','C'),
-            Card.new('2','S')
-          ])
+                                                 Card.new('2', 'H'),
+                                                 Card.new('2', 'D'),
+                                                 Card.new('2', 'C'),
+                                                 Card.new('2', 'S')
+                                               ])
           game.players[1].add_cards_to_hand([
-            Card.new('A','H'),
-            Card.new('A','D'),
-            Card.new('A','C'),
-            Card.new('A','S')
-          ])
+                                              Card.new('A', 'H'),
+                                              Card.new('A', 'D'),
+                                              Card.new('A', 'C'),
+                                              Card.new('A', 'S')
+                                            ])
         end
 
         it 'returns player 2' do
