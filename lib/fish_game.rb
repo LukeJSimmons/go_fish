@@ -7,9 +7,9 @@ class FishGame
 
   BASE_HAND_SIZE = 7
 
-  def initialize
+  def initialize(players=[FishPlayer.new('Player 1'), FishPlayer.new('Player 2')])
     @deck = CardDeck.new
-    @players = [FishPlayer.new('Player 1'), FishPlayer.new('Player 2')]
+    @players = players
     @current_player = players[0]
     @current_opponent = players[1]
   end

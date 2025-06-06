@@ -13,6 +13,10 @@ class FishSocketServer
   def players
     @players ||= []
   end
+
+  def games
+    @games ||= []
+  end
   
   def start
     @server = TCPServer.new(port_number)
@@ -30,6 +34,8 @@ class FishSocketServer
 
   def create_game_if_possible
     return unless players.count == 2
-    FishGame.new
+    game = FishGame.new(players)
+    games << game
+    game
   end
 end
