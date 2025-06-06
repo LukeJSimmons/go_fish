@@ -93,4 +93,33 @@ describe FishSocketServer do
       end
     end
   end
+
+  context 'when there are two players' do
+      let(:client1) { MockFishSocketClient.new(@server.port_number) }
+      let(:client2) { MockFishSocketClient.new(@server.port_number) }
+
+      before do
+        @clients.push(client1)
+        @server.accept_new_client('Player 1')
+        @clients.push(client2)
+        @server.accept_new_client('Player 2')
+      end
+    describe '#run_game' do
+      before do
+        @server.create_game_if_possible
+      end
+
+      it 'displays current hand' do
+        @server.run_game
+        expect(client1.capture_output).to include @server.players[0].hand.join(' ')
+        expect(client2.capture_output).to include @server.players[1].hand.join(' ')
+      end
+
+      it 'displays winner message' do
+        @server.run_game
+        expect(client1.capture_output).to match /win/i
+        expect(client2.capture_output).to match /win/i
+      end
+    end
+  end
 end
