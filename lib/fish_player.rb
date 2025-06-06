@@ -27,7 +27,7 @@ class FishPlayer
     book.each do |book_card|
       hand.delete(book_card)
     end
-    books << book
+    add_book_to_books(book)
   end
 
   def has_book?
@@ -37,5 +37,16 @@ class FishPlayer
       end
     end
     ranks.select { |rank| rank.count == 4 }.flatten
+  end
+  
+  def add_book_to_books(book)
+    return unless book_only_contains_cards?(book)
+    books << book
+  end
+
+  private
+
+  def book_only_contains_cards?(book)
+    book.all? { |card| card.respond_to? :rank } && !book.empty?
   end
 end

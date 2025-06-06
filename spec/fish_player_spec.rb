@@ -136,4 +136,35 @@ describe 'FishPlayer' do
       end
     end
   end
+
+  describe '#add_book_to_books' do
+    let(:valid_book) {
+      [
+        Card.new('A','H'),
+        Card.new('A','D'),
+        Card.new('A','C'),
+        Card.new('A','S')
+      ]
+    }
+    let(:invalid_book) {
+      [
+        [],
+        [],
+        Card.new('A','H'),
+        Card.new('A','D')
+      ]
+    }
+
+    it 'adds a valid book to books array' do
+      expect {
+        player.add_book_to_books(valid_book)
+      }.to change(player.books, :count).by 1
+    end
+
+    it 'does not add an invalid book to books array' do
+      expect {
+        player.add_book_to_books(invalid_book)
+      }.to_not change(player.books, :count)
+    end
+  end
 end
