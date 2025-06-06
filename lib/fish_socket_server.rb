@@ -30,6 +30,7 @@ class FishSocketServer
     client = @server.accept_nonblock
     clients << client
     players << FishPlayer.new(player_name)
+    client.puts "Welcome to Go Fish!"
   end
 
   def create_game_if_possible
