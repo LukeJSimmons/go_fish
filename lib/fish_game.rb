@@ -22,12 +22,14 @@ class FishGame
   def play_round(target=current_opponent, request=current_player.request_card)
     matching_cards = request ? target.get_matching_cards(request) : []
     matching_cards.each { |card| current_player.add_cards_to_hand(card) }
-    puts "\n#{matching_cards.empty? ? "#{current_player.name}: Draws a card" : "#{current_player.name} took #{matching_cards.map(&:rank)}"}\n\n"
+    
+    if matching_cards.empty?
+      drawn_card = current_player.add_cards_to_hand(deck.draw_card)
+      swap_turns
+      return drawn_card
+    end
 
-    return unless matching_cards.empty?
-
-    current_player.add_cards_to_hand(deck.draw_card)
-    swap_turns
+    matching_cards
   end
 
   def play_game
