@@ -1,3 +1,6 @@
+require 'fish_game'
+require 'fish_player'
+
 class FishSocketServer
   def port_number
     3000
@@ -5,6 +8,10 @@ class FishSocketServer
 
   def clients
     @clients ||= []
+  end
+
+  def players
+    @players ||= []
   end
   
   def start
@@ -18,5 +25,11 @@ class FishSocketServer
   def accept_new_client(player_name="Random Player")
     client = @server.accept_nonblock
     clients << client
+    players << FishPlayer.new(player_name)
+  end
+
+  def create_game_if_possible
+    return unless players.count == 2
+    FishGame.new
   end
 end

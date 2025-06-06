@@ -43,4 +43,35 @@ describe FishSocketServer do
     @server.stop
     expect {MockFishSocketClient.new(@server.port_number)}.to raise_error(Errno::ECONNREFUSED)
   end
+
+  describe '#create_game_if_possible' do
+    context 'when there is only one player' do
+      let(:client1) { MockFishSocketClient.new(@server.port_number) }
+
+      before do
+        @clients.push(client1)
+        @server.accept_new_client('Player 1')
+      end
+
+      it 'returns nil' do
+        expect(@server.create_game_if_possible).to eq nil
+      end
+    end
+
+    context 'when there are two players' do
+      let(:client1) { MockFishSocketClient.new(@server.port_number) }
+      let(:client2) { MockFishSocketClient.new(@server.port_number) }
+
+      before do
+        @clients.push(client1)
+        @server.accept_new_client('Player 1')
+        @clients.push(client2)
+        @server.accept_new_client('Player 2')
+      end
+
+      it 'returns a FishGame' do
+        expect(@server.create_game_if_possible).to respond_to :deck
+      end
+    end
+  end
 end
