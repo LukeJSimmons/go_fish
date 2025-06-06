@@ -17,6 +17,7 @@ class FishGame
   def start
     deck.shuffle!
     deal_base_hands
+    self
   end
 
   def play_round(target=current_opponent, request=current_player.request_card)

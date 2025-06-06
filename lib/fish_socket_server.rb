@@ -38,7 +38,7 @@ class FishSocketServer
     message_all_clients("All players have joined. We're ready to play!")
     game = FishGame.new(players)
     games << game
-    game
+    game.start
   end
 
   private
