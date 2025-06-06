@@ -23,14 +23,13 @@ class FishGame
     matching_cards = request ? target.get_matching_cards(request) : []
     matching_cards.each { |card| current_player.add_cards_to_hand(card) }
     
-    if matching_cards.empty?
-      drawn_card = current_player.add_cards_to_hand(deck.draw_card)
-      return unless request
-      swap_turns unless drawn_card.rank == request.rank
-      return drawn_card
-    end
+    return matching_cards unless matching_cards.empty?
 
-    matching_cards
+    #TODO: Extract to it's own method
+    drawn_card = current_player.add_cards_to_hand(deck.draw_card)
+    return unless request
+    swap_turns unless drawn_card.rank == request.rank
+    drawn_card
   end
 
   def play_game

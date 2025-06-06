@@ -1,9 +1,9 @@
 require_relative 'card'
 
-BASE_DECK_SIZE = 52
-
 class CardDeck
   attr_reader :cards
+
+  BASE_DECK_SIZE = 52
 
   def initialize
     @cards = build_cards

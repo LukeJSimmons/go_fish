@@ -13,7 +13,7 @@ describe 'CardDeck' do
     end
 
     it 'starts with base amount of cards' do
-      expect(deck.cards.count).to eq BASE_DECK_SIZE
+      expect(deck.cards.count).to eq CardDeck::BASE_DECK_SIZE
     end
   end
 

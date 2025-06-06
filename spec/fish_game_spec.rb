@@ -1,7 +1,7 @@
 require 'fish_game'
 require 'card_deck'
 
-describe 'FishGame' do
+describe FishGame do
   let(:game) { FishGame.new }
   describe '#initialize' do
     it 'has a deck' do
@@ -12,10 +12,6 @@ describe 'FishGame' do
       expect(game.deck).to respond_to :cards
     end
 
-    it 'deck has BASE_DECK_SIZE cards' do
-      expect(game.deck.cards.count).to eq BASE_DECK_SIZE
-    end
-
     it 'has players' do
       expect(game).to respond_to :players
     end
@@ -24,7 +20,7 @@ describe 'FishGame' do
       expect(game.players.count).to eq 2
     end
 
-    it 'players are both FishPlayer objects' do
+    it 'both players are FishPlayer objects' do
       expect(game.players.all? { |player| player.respond_to? :hand }).to eq true
     end
   end
@@ -37,9 +33,10 @@ describe 'FishGame' do
       expect(game.deck).to_not eq unshuffled_deck
     end
 
-    it 'deals 7 cards to each player' do
+    it 'deals BASE_HAND_SIZE cards to each player' do
       game.start
-      expect(game.players.all? { |player| player.hand.count == 7 }).to eq true
+      # binding.irb
+      expect(game.players.all? { |player| player.hand.count == FishGame::BASE_HAND_SIZE }).to eq true
     end
   end
 
@@ -74,6 +71,8 @@ describe 'FishGame' do
           game.play_round
         end.to change(game.current_player.hand, :count).by 1
       end
+
+      it 'removes a card from the deck'
 
       context 'when drawn card is not what he requested' do
         before do
