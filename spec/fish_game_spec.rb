@@ -85,39 +85,113 @@ describe 'FishGame' do
   end
 
   describe '#play_game' do
-    before do
-      game.start
-    end
-
     it 'plays until the deck is empty' do
+      game.start
       game.play_game
       expect(game.deck.cards.count).to eq 0
+    end
+
+    context 'when player 1 wins' do
+      before do
+        50.times do
+          game.players.first.add_cards_to_hand(game.deck.draw_card)
+        end
+      end
+
+      it 'returns the game winner' do
+        expect(game.play_game).to eq game.players.first
+      end
+    end
+
+    context 'when player 1 wins' do
+      before do
+        50.times do
+          game.players[1].add_cards_to_hand(game.deck.draw_card)
+        end
+      end
+
+      it 'returns the game winner' do
+        expect(game.play_game).to eq game.players[1]
+      end
     end
   end
 
   describe '#determine_winner' do
-    it 'returns the player 1 if he has most books' do
-      game.players.first.add_cards_to_hand([
-        Card.new('A','H'),
-        Card.new('A','D'),
-        Card.new('A','C'),
-        Card.new('A','S')
-      ])
-      expect(game.determine_winner).to eq game.players.first
+    context 'when player 1 has the most books' do
+      before do
+        game.players.first.add_cards_to_hand([
+          Card.new('A','H'),
+          Card.new('A','D'),
+          Card.new('A','C'),
+          Card.new('A','S')
+        ])
+      end
+
+      it 'returns the player 1' do
+        expect(game.determine_winner).to eq game.players.first
+      end
     end
 
-    it 'returns the player 2 if he has most books' do
-      game.players[1].add_cards_to_hand([
-        Card.new('A','H'),
-        Card.new('A','D'),
-        Card.new('A','C'),
-        Card.new('A','S'),
-        Card.new('9','H'),
-        Card.new('9','D'),
-        Card.new('9','C'),
-        Card.new('9','S'),
-      ])
-      expect(game.determine_winner).to eq game.players[1]
+    context 'when player 2 has the most books' do
+      before do
+        game.players[1].add_cards_to_hand([
+          Card.new('A','H'),
+          Card.new('A','D'),
+          Card.new('A','C'),
+          Card.new('A','S'),
+          Card.new('9','H'),
+          Card.new('9','D'),
+          Card.new('9','C'),
+          Card.new('9','S'),
+        ])
+      end
+      
+      it 'returns the player 2 if he has most books' do
+        expect(game.determine_winner).to eq game.players[1]
+      end
+    end
+
+    context 'when players are tied for amount of books' do
+      context 'when player 1 has highest rank book' do
+        before do
+          game.players.first.add_cards_to_hand([
+            Card.new('A','H'),
+            Card.new('A','D'),
+            Card.new('A','C'),
+            Card.new('A','S')
+          ])
+          game.players[1].add_cards_to_hand([
+            Card.new('2','H'),
+            Card.new('2','D'),
+            Card.new('2','C'),
+            Card.new('2','S')
+          ])
+        end
+        it 'returns player 1' do
+          expect(game.determine_winner).to eq game.players.first
+        end
+      end
+
+      context 'when player 2 has highest rank book' do
+        before do
+          game.players.first.add_cards_to_hand([
+            Card.new('2','H'),
+            Card.new('2','D'),
+            Card.new('2','C'),
+            Card.new('2','S')
+          ])
+          game.players[1].add_cards_to_hand([
+            Card.new('A','H'),
+            Card.new('A','D'),
+            Card.new('A','C'),
+            Card.new('A','S')
+          ])
+        end
+
+        it 'returns player 2' do
+          expect(game.determine_winner).to eq game.players[1]
+        end
+      end
     end
   end
 

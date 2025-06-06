@@ -10,6 +10,10 @@ describe 'Card' do
     it 'has a suit' do
       expect(card).to respond_to :suit
     end
+
+    it 'has a value' do
+      expect(card).to respond_to :value
+    end
     
     context 'when card is A of H' do
       let(:card) { Card.new('A', 'H') }
