@@ -53,7 +53,7 @@ describe FishSocketServer do
     end
 
     it 'sends a welcome message to client' do
-      expect(client1.capture_output).to match /welcome/i
+      expect(client1.capture_output).to match (/welcome/i)
     end
   end
 
@@ -81,9 +81,15 @@ describe FishSocketServer do
         @clients.push(client2)
         @server.accept_new_client('Player 2')
       end
-      
+
       it 'returns a FishGame with players' do
         expect(@server.create_game_if_possible.players).to eq @server.players
+      end
+
+      it 'sends a ready message to each client' do
+        @server.create_game_if_possible
+        expect(client1.capture_output).to match (/ready/i)
+        expect(client2.capture_output).to match (/ready/i)
       end
     end
   end

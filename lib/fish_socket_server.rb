@@ -35,8 +35,15 @@ class FishSocketServer
 
   def create_game_if_possible
     return unless players.count == 2
+    message_all_clients("All players have joined. We're ready to play!")
     game = FishGame.new(players)
     games << game
     game
+  end
+
+  private
+
+  def message_all_clients(message)
+    clients.each { |client| client.puts message }
   end
 end
