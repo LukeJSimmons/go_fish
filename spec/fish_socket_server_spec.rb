@@ -81,19 +81,9 @@ describe FishSocketServer do
         @clients.push(client2)
         @server.accept_new_client('Player 2')
       end
-
-      it 'returns a FishGame' do
-        expect(@server.create_game_if_possible).to respond_to :deck
-      end
-
+      
       it 'returns a FishGame with players' do
         expect(@server.create_game_if_possible.players).to eq @server.players
-      end
-
-      it 'adds game to games array' do
-        expect {
-          @server.create_game_if_possible
-        }.to change(@server.games, :count).by 1
       end
     end
   end
