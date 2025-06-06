@@ -117,8 +117,8 @@ describe FishSocketServer do
 
       it 'displays winner message' do
         @server.run_game
-        expect(client1.capture_output).to match /win/i
-        expect(client2.capture_output).to match /win/i
+        expect(client1.capture_output).to match (/win/i)
+        expect(client2.capture_output).to match (/win/i)
       end
     end
   end
