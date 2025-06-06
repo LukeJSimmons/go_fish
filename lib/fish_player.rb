@@ -31,12 +31,7 @@ class FishPlayer
   end
 
   def get_book
-    ranks = Card::RANKS.map do |rank|
-      hand.select do |card|
-        card.rank == rank
-      end
-    end
-    ranks.select { |rank| rank.count == 4 }.flatten
+    hand.group_by(&:rank).select { |rank, cards| cards.count == 4 }.first&.last || []
   end
 
   def add_book_to_books(book)
