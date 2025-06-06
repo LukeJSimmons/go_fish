@@ -19,10 +19,10 @@ class FishGame
     deal_base_hands
   end
 
-  def play_round
-    card_request = current_player.request_card
-    matching_cards = card_request ? current_opponent.get_matching_cards(card_request) : []
+  def play_round(target=current_opponent, request=current_player.request_card)
+    matching_cards = request ? target.get_matching_cards(request) : []
     matching_cards.each { |card| current_player.add_cards_to_hand(card) }
+    puts "\n#{matching_cards.empty? ? "#{current_player.name}: Draws a card" : "#{current_player.name} took #{matching_cards.map(&:rank)}"}\n\n"
 
     return unless matching_cards.empty?
 
