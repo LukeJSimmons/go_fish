@@ -21,7 +21,7 @@ class FishGame
 
   def play_round
     card_request = current_player.request_card
-    matching_cards = current_opponent.get_matching_cards(card_request)
+    matching_cards = card_request ? current_opponent.get_matching_cards(card_request) : []
     matching_cards.each { |card| current_player.add_card_to_hand(card) }
 
     if matching_cards.empty?
@@ -38,7 +38,7 @@ class FishGame
 
   def determine_winner
     total_books = players.map { |player| player.books.length }
-    total_books.max
+    players[total_books.find_index(total_books.max)]
   end
 
   def swap_turns
