@@ -47,9 +47,11 @@ describe 'FishPlayer' do
 
   describe '#request_card' do
     before do
-      player.add_cards_to_hand(Card.new('A','H'))
-      player.add_cards_to_hand(Card.new('10','H'))
-      player.add_cards_to_hand(Card.new('Q','H'))
+      player.add_cards_to_hand([
+        Card.new('A','H'),
+        Card.new('10','H'),
+        Card.new('Q','H')
+      ])
     end
     it 'returns a card from hand' do
       expect(player.hand).to include player.request_card
@@ -75,10 +77,12 @@ describe 'FishPlayer' do
   describe '#has_book?' do
     context 'when player does not have book' do
       before do
-        player.add_cards_to_hand(Card.new('A','H'))
-        player.add_cards_to_hand(Card.new('A','C'))
-        player.add_cards_to_hand(Card.new('A','D'))
-        player.add_cards_to_hand(Card.new('10','S'))
+        player.add_cards_to_hand([
+          Card.new('A','H'),
+          Card.new('A','C'),
+          Card.new('A','D'),
+          Card.new('10','S')
+        ],false)
       end
 
       it 'should return an empty array' do
@@ -88,10 +92,12 @@ describe 'FishPlayer' do
 
     context 'when player does have a book' do
       before do
-        player.add_cards_to_hand(Card.new('A','H'),false)
-        player.add_cards_to_hand(Card.new('A','D'),false)
-        player.add_cards_to_hand(Card.new('A','C'),false)
-        player.add_cards_to_hand(Card.new('A','S'),false)
+        player.add_cards_to_hand([
+          Card.new('A','H'),
+          Card.new('A','C'),
+          Card.new('A','D'),
+          Card.new('A','S')
+        ],false)
       end
 
       it 'should return array of matching cards' do
@@ -108,10 +114,12 @@ describe 'FishPlayer' do
   describe '#check_for_book' do
     context 'when player does have book' do
       before do
-        player.add_cards_to_hand(Card.new('A','H'),false)
-        player.add_cards_to_hand(Card.new('A','D'),false)
-        player.add_cards_to_hand(Card.new('A','C'),false)
-        player.add_cards_to_hand(Card.new('A','S'),false)
+        player.add_cards_to_hand([
+          Card.new('A','H'),
+          Card.new('A','C'),
+          Card.new('A','D'),
+          Card.new('A','S')
+        ],false)
       end
 
       it 'removes the book from the hand' do
@@ -129,10 +137,12 @@ describe 'FishPlayer' do
 
     context 'when player does not have book' do
       before do
-        player.add_cards_to_hand(Card.new('A','H'))
-        player.add_cards_to_hand(Card.new('A','D'))
-        player.add_cards_to_hand(Card.new('A','C'))
-        player.add_cards_to_hand(Card.new('10','S'))
+       player.add_cards_to_hand([
+          Card.new('A','H'),
+          Card.new('A','C'),
+          Card.new('A','D'),
+          Card.new('A','S')
+        ])
       end
 
       it 'does not remove the book from the hand' do

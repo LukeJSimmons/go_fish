@@ -97,18 +97,26 @@ describe 'FishGame' do
 
   describe '#determine_winner' do
     it 'returns the player 1 if he has most books' do
-      game.players.first.add_cards_to_hand(Card.new('A','H'))
-      game.players.first.add_cards_to_hand(Card.new('A','D'))
-      game.players.first.add_cards_to_hand(Card.new('A','C'))
-      game.players.first.add_cards_to_hand(Card.new('A','S'))
+      game.players.first.add_cards_to_hand([
+        Card.new('A','H'),
+        Card.new('A','D'),
+        Card.new('A','C'),
+        Card.new('A','S')
+      ])
       expect(game.determine_winner).to eq game.players.first
     end
 
     it 'returns the player 2 if he has most books' do
-      game.players[1].add_cards_to_hand(Card.new('A','H'))
-      game.players[1].add_cards_to_hand(Card.new('A','D'))
-      game.players[1].add_cards_to_hand(Card.new('A','C'))
-      game.players[1].add_cards_to_hand(Card.new('A','S'))
+      game.players[1].add_cards_to_hand([
+        Card.new('A','H'),
+        Card.new('A','D'),
+        Card.new('A','C'),
+        Card.new('A','S'),
+        Card.new('9','H'),
+        Card.new('9','D'),
+        Card.new('9','C'),
+        Card.new('9','S'),
+      ])
       expect(game.determine_winner).to eq game.players[1]
     end
   end

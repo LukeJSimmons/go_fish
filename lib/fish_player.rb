@@ -8,7 +8,7 @@ class FishPlayer
   end
 
   def add_cards_to_hand(cards, check_book=true)
-    hand.unshift *Array(cards)
+    hand.unshift(*Array(cards))
     check_for_book if check_book
   end
 
