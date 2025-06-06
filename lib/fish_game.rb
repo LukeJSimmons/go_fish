@@ -22,10 +22,10 @@ class FishGame
   def play_round
     card_request = current_player.request_card
     matching_cards = card_request ? current_opponent.get_matching_cards(card_request) : []
-    matching_cards.each { |card| current_player.add_card_to_hand(card) }
+    matching_cards.each { |card| current_player.add_cards_to_hand(card) }
 
     if matching_cards.empty?
-      current_player.add_card_to_hand(deck.draw_card)
+      current_player.add_cards_to_hand(deck.draw_card)
       swap_turns
     end
   end
@@ -49,7 +49,7 @@ class FishGame
 
   def deal_base_hands
     BASE_HAND_SIZE.times do
-      players.each { |player| player.add_card_to_hand(deck.draw_card) }
+      players.each { |player| player.add_cards_to_hand(deck.draw_card) }
     end
   end
 end

@@ -47,8 +47,8 @@ describe 'FishGame' do
 
     context 'when opponent does have match' do
       before do
-        game.current_player.add_card_to_hand(Card.new('A','H'))
-        game.current_opponent.add_card_to_hand(Card.new('A','C'))
+        game.current_player.add_cards_to_hand(Card.new('A','H'))
+        game.current_opponent.add_cards_to_hand(Card.new('A','C'))
       end
 
       it "adds A of C to current player's hand" do
@@ -66,8 +66,8 @@ describe 'FishGame' do
 
     context 'when opponent does not have match' do
       before do
-        game.current_player.add_card_to_hand(Card.new('A','H'))
-        game.current_opponent.add_card_to_hand(Card.new('9','C'))
+        game.current_player.add_cards_to_hand(Card.new('A','H'))
+        game.current_opponent.add_cards_to_hand(Card.new('9','C'))
       end
 
       it 'player should draw a card' do
@@ -97,18 +97,18 @@ describe 'FishGame' do
 
   describe '#determine_winner' do
     it 'returns the player 1 if he has most books' do
-      game.players.first.add_card_to_hand(Card.new('A','H'))
-      game.players.first.add_card_to_hand(Card.new('A','D'))
-      game.players.first.add_card_to_hand(Card.new('A','C'))
-      game.players.first.add_card_to_hand(Card.new('A','S'))
+      game.players.first.add_cards_to_hand(Card.new('A','H'))
+      game.players.first.add_cards_to_hand(Card.new('A','D'))
+      game.players.first.add_cards_to_hand(Card.new('A','C'))
+      game.players.first.add_cards_to_hand(Card.new('A','S'))
       expect(game.determine_winner).to eq game.players.first
     end
 
     it 'returns the player 2 if he has most books' do
-      game.players[1].add_card_to_hand(Card.new('A','H'))
-      game.players[1].add_card_to_hand(Card.new('A','D'))
-      game.players[1].add_card_to_hand(Card.new('A','C'))
-      game.players[1].add_card_to_hand(Card.new('A','S'))
+      game.players[1].add_cards_to_hand(Card.new('A','H'))
+      game.players[1].add_cards_to_hand(Card.new('A','D'))
+      game.players[1].add_cards_to_hand(Card.new('A','C'))
+      game.players[1].add_cards_to_hand(Card.new('A','S'))
       expect(game.determine_winner).to eq game.players[1]
     end
   end
