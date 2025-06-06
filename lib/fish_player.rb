@@ -23,14 +23,14 @@ class FishPlayer
   end
 
   def check_for_book
-    book = has_book?
+    book = get_book
     book.each do |book_card|
       hand.delete(book_card)
     end
     add_book_to_books(book)
   end
 
-  def has_book?
+  def get_book
     ranks = Card::RANKS.map do |rank|
       hand.select do |card|
         card.rank == rank

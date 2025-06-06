@@ -74,7 +74,7 @@ describe 'FishPlayer' do
     end
   end
 
-  describe '#has_book?' do
+  describe '#get_book' do
     context 'when player does not have book' do
       before do
         player.add_cards_to_hand([
@@ -86,7 +86,7 @@ describe 'FishPlayer' do
       end
 
       it 'should return an empty array' do
-        expect(player.has_book?).to eq []
+        expect(player.get_book).to eq []
       end
     end
 
@@ -101,7 +101,7 @@ describe 'FishPlayer' do
       end
 
       it 'should return array of matching cards' do
-        expect(player.has_book?).to match_array [
+        expect(player.get_book).to match_array [
           Card.new('A', 'H'),
           Card.new('A', 'D'),
           Card.new('A', 'C'),
