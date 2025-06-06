@@ -68,17 +68,35 @@ describe 'FishGame' do
         game.current_player.add_cards_to_hand(Card.new('A', 'H'))
         game.current_opponent.add_cards_to_hand(Card.new('9', 'C'))
       end
-
+      
       it 'player should draw a card' do
         expect do
           game.play_round
         end.to change(game.current_player.hand, :count).by 1
       end
 
-      it 'should swap turns' do
-        game.play_round
-        expect(game.current_player).to eq game.players[1]
-        expect(game.current_opponent).to eq game.players[0]
+      context 'when drawn card is not what he requested' do
+        before do
+          allow(game.deck).to receive(:draw_card).and_return(Card.new('8','S'))
+        end
+
+        it 'should swap turns' do
+          game.play_round
+          expect(game.current_player).to eq game.players[1]
+          expect(game.current_opponent).to eq game.players[0]
+        end
+      end
+
+      context 'when drawn card is what he requested' do
+        before do
+          allow(game.deck).to receive(:draw_card).and_return(Card.new('A','S'))
+        end
+
+        it 'should not swap turns' do
+          game.play_round
+          expect(game.current_player).to eq game.players[0]
+          expect(game.current_opponent).to eq game.players[1]
+        end
       end
     end
   end

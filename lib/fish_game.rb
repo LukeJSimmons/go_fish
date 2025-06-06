@@ -25,7 +25,8 @@ class FishGame
     
     if matching_cards.empty?
       drawn_card = current_player.add_cards_to_hand(deck.draw_card)
-      swap_turns
+      return unless request
+      swap_turns unless drawn_card.rank == request.rank
       return drawn_card
     end
 

@@ -5,11 +5,11 @@ game.start
 
 until game.deck.cards.empty?
   puts "#{game.current_player.name}'s turn"
-  puts "You have #{game.current_player.hand.map(&:rank).sort}" unless game.current_player.name != "Player 1"
-  puts "You have #{game.current_player.books.count} books"
+  # puts "You have #{game.current_player.hand.map(&:rank).sort}" unless game.current_player.name != "Player 1"
+  puts "You have #{game.current_player.books.count} book#{"s" if game.current_player.books.count > 1}"
 
-  puts "Who would you like to target?"
-  target = gets.chomp
+  # puts "Who would you like to target?"
+  target = game.current_opponent.name
   target = game.players.find { |player| player.name == target }
 
   puts "What card would you like to request?"
