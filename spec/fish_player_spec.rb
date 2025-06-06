@@ -82,10 +82,10 @@ describe 'FishPlayer' do
 
     context 'when player does have a book' do
       before do
-        player.add_card_to_hand(Card.new('A','H'))
-        player.add_card_to_hand(Card.new('A','D'))
-        player.add_card_to_hand(Card.new('A','C'))
-        player.add_card_to_hand(Card.new('A','S'))
+        player.add_card_to_hand(Card.new('A','H'),false)
+        player.add_card_to_hand(Card.new('A','D'),false)
+        player.add_card_to_hand(Card.new('A','C'),false)
+        player.add_card_to_hand(Card.new('A','S'),false)
       end
 
       it 'should return array of matching cards' do
@@ -102,17 +102,22 @@ describe 'FishPlayer' do
   describe '#check_for_book' do
     context 'when player does have book' do
       before do
-        player.add_card_to_hand(Card.new('A','H'))
-        player.add_card_to_hand(Card.new('A','D'))
-        player.add_card_to_hand(Card.new('A','C'))
-        player.add_card_to_hand(Card.new('A','S'))
+        player.add_card_to_hand(Card.new('A','H'),false)
+        player.add_card_to_hand(Card.new('A','D'),false)
+        player.add_card_to_hand(Card.new('A','C'),false)
+        player.add_card_to_hand(Card.new('A','S'),false)
       end
 
       it 'removes the book from the hand' do
-        binding.irb
         expect {
           player.check_for_book
         }.to change(player.hand, :count).by (-4)
+      end
+
+      it 'adds the book to books' do
+        expect {
+          player.check_for_book
+        }.to change(player.books, :count).by 1
       end
     end
 

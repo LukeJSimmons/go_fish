@@ -7,8 +7,9 @@ class FishPlayer
     @books = []
   end
 
-  def add_card_to_hand(card)
+  def add_card_to_hand(card, check_book=true)
     hand.unshift card
+    check_for_book if check_book
   end
 
   def request_card
@@ -23,9 +24,10 @@ class FishPlayer
 
   def check_for_book
     book = has_book?
-    hand.each do |card|
-      hand.delete(card) if book.include? card
+    book.each do |book_card|
+      hand.delete(book_card)
     end
+    books << book
   end
 
   def has_book?
