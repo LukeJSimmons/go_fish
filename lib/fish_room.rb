@@ -1,16 +1,23 @@
 class FishRoom
   attr_reader :game
+  attr_accessor :target, :request
 
-  def initialize(game)
+  def initialize(game, target=nil, request=nil)
     @game = game
+    @target = target
+    @request = request
   end
 
-  def run_round(default_target=nil,default_request=nil)
+  def run_round
     display_hand
-    target = get_target(default_target)
-    request = get_request(default_request)
+    target = get_target
+    request = get_request
     results = game.play_round(target, request)
     display_results(results)
+  end
+
+  def run_game
+    run_round until game.deck.empty?
   end
 
   private
@@ -19,23 +26,25 @@ class FishRoom
     message_current_player "#{game.current_player.name}, your hand is: " + game.current_player.hand.map(&:rank).join(' ')
   end
 
-  def get_target(default_target=nil)
+  def get_target
     message_current_player "Please input your target: "
-    input = default_target || get_current_player_input
+    input = target || get_current_player_input
     target = game.players.find { |player| player.name == input }
 
-    get_target(default_target) unless target
+    get_target unless target
 
     message_current_player "Your target is: " + target.name
     target
   end
 
-  def get_request(default_request=nil)
+  def get_request
     message_current_player "Please input your request: "
-    input = default_request || get_current_player_input
+    input = request || get_current_player_input
     request = game.current_player.hand.find { |card| card.rank == input }
+
+    binding.irb unless request
     
-    get_request(default_request) unless request
+    get_request unless request
 
     message_current_player "Your request is: " + request.rank
     request
@@ -45,7 +54,7 @@ class FishRoom
     if results.is_a? Array
       message_all_clients "You took #{'a' if results.count == 1} #{results.count} #{results.first.rank}#{'s' unless results.count == 1}"
     else
-      message_all_clients "Go fish: You took a #{results} from the deck"
+      message_all_clients "Go fish: You took a #{results.rank} from the deck"
     end
   end
 
