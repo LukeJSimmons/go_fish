@@ -34,7 +34,7 @@ describe FishRoom do
     @clients = []
     @server = FishSocketServer.new
     @server.start
-    sleep 0.4
+    sleep 0.1
     @clients.push(client1)
     @server.accept_new_client('Player 1')
     @clients.push(client2)
