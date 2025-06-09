@@ -45,7 +45,7 @@ class FishGame
   end
 
   def current_player
-    players[round%players.count]
+    players[round % players.count]
   end
 
   def current_opponents
