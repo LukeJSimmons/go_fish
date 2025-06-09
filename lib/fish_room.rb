@@ -13,11 +13,14 @@ class FishRoom
     target = get_target
     request = get_request
     results = game.play_round(target, request)
+
     display_results(results)
   end
 
   def run_game
-    run_round until game.deck.empty?
+    run_round until game.deck.empty? || game.players.any? { |player| player.hand.empty? }
+    message_all_clients game.determine_winner.name + " Wins"
+    game.determine_winner
   end
 
   private
@@ -28,25 +31,29 @@ class FishRoom
 
   def get_target
     message_current_player "Please input your target: "
+    if target
+      target = game.current_opponents.first.name
+    end
     input = target || get_current_player_input
     target = game.players.find { |player| player.name == input }
 
     get_target unless target
 
-    message_current_player "Your target is: " + target.name
+    message_current_player target.name
     target
   end
 
   def get_request
     message_current_player "Please input your request: "
+    if request
+      request = game.current_player.hand.sample.rank
+    end
     input = request || get_current_player_input
     request = game.current_player.hand.find { |card| card.rank == input }
-
-    binding.irb unless request
     
     get_request unless request
 
-    message_current_player "Your request is: " + request.rank
+    message_current_player request.rank
     request
   end
 

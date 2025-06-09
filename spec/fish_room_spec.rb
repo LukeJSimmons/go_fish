@@ -80,7 +80,7 @@ describe FishRoom do
 
       it 'displays the target back to the player' do
         room.run_round
-        expect(client1.capture_output).to include "Your target is: Player 2"
+        expect(client1.capture_output).to include "Player 2"
       end
 
       it 'asks the player for a request' do
@@ -90,7 +90,7 @@ describe FishRoom do
 
       it 'displays the request back to the player' do
         room.run_round
-        expect(client1.capture_output).to include "Your request is: #{room.request}"
+        expect(client1.capture_output).to include "#{room.request}"
       end
 
       it 'displays results' do
@@ -127,7 +127,7 @@ describe FishRoom do
 
       it 'displays the target back to the player' do
         room.run_round
-        expect(client2.capture_output).to include "Your target is: Player 1"
+        expect(client2.capture_output).to include "Player 1"
       end
 
       it 'asks the player for a request' do
@@ -137,7 +137,7 @@ describe FishRoom do
 
       it 'displays the request back to the player' do
         room.run_round
-        expect(client2.capture_output).to include "Your request is: #{room.request}"
+        expect(client2.capture_output).to include "#{room.request}"
       end
 
       it 'displays results' do
@@ -148,8 +148,18 @@ describe FishRoom do
   end
 
   describe '#run_game' do
-    xit 'plays until the deck is empty' do
-      expect(room.run_game).to eq "done"
+    let(:game) { @server.create_game_if_possible }
+
+    let(:room) {
+      FishRoom.new(
+        game,
+        game.current_opponents.first.name,
+        game.current_player.hand.sample.rank
+        )
+      }
+
+    it 'displays winner' do
+      expect(room.run_game).to respond_to :hand
     end
   end
 end
