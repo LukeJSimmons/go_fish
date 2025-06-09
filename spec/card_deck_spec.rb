@@ -44,4 +44,15 @@ describe 'CardDeck' do
       expect(deck).to_not eq unshuffled_deck
     end
   end
+
+  describe '#empty?' do
+    it 'returns false if cards are not empty' do
+      expect(deck.empty?).to eq false
+    end
+
+    it 'returns true if cards are empty' do
+      deck.draw_card until deck.cards.empty?
+      expect(deck.empty?).to eq true
+    end
+  end
 end
