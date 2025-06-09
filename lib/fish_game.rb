@@ -33,15 +33,15 @@ class FishGame
     play_round until deck.cards.empty?
     determine_winner
   end
-
+  
   def determine_winner
     total_books = players.map { |player| player.books.length }
-
+    
     if total_books.uniq.count != total_books.count
       highest_ranks = players.map { |player| player.books.map { |book| book.first.value } }
       return players[highest_ranks.find_index(highest_ranks.max)]
     end
-
+    
     players[total_books.find_index(total_books.max)]
   end
 
@@ -49,6 +49,7 @@ class FishGame
     self.current_player, self.current_opponent = current_opponent, current_player
   end
 
+  #TODO: Move to runner
   def message_current_player(message)
     current_player.client.puts message
   end

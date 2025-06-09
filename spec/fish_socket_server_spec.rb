@@ -115,7 +115,7 @@ describe FishSocketServer do
       end
     end
 
-    describe '#play_round' do
+    describe '#run_round' do
       it 'displays current player hand' do
         @server.run_round(@game)
         expect(client1.capture_output).to include @server.players[0].hand.map(&:rank).join(' ')
