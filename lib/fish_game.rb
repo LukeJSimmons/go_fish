@@ -52,11 +52,6 @@ class FishGame
     players.select { |player| player != current_player }
   end
 
-  #TODO: Move to runner
-  def message_current_player(message)
-    current_player.client.puts message
-  end
-
   private
 
   def deal_base_hands

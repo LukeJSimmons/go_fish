@@ -58,7 +58,18 @@ describe FishRoom do
   describe '#run_round' do
     it 'displays current player hand to their client' do
       room.run_round
-      expect(client1.capture_output).to include room.game.current_player.hand.map(&:rank).join(' ')
+      expect(client1.capture_output).to include "Your hand is: " + room.game.current_player.hand.map(&:rank).join(' ')
+    end
+
+    it 'asks the player for a target' do
+      room.run_round
+      expect(client1.capture_output).to match (/target/i)
+    end
+
+    it 'displays the target back to the player' do
+      client1.provide_input "Player 2"
+      room.run_round
+      expect(client1.capture_output).to include "Player 2"
     end
   end
 end
