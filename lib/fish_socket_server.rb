@@ -1,5 +1,6 @@
 require 'fish_game'
 require 'fish_player'
+require 'fish_room'
 
 class FishSocketServer
   def port_number
@@ -16,6 +17,10 @@ class FishSocketServer
 
   def games
     @games ||= []
+  end
+
+  def rooms
+    @rooms ||= []
   end
   
   def start
@@ -39,6 +44,8 @@ class FishSocketServer
     game = FishGame.new(players)
     games << game
     game.start
+    rooms << FishRoom.new(game)
+    game
   end
 
   private
