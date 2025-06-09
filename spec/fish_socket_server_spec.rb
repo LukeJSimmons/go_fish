@@ -82,8 +82,9 @@ describe FishSocketServer do
         @server.accept_new_client('Player 2')
       end
 
-      it 'returns a FishGame with players' do
-        expect(@server.create_game_if_possible.players).to eq @server.players
+      it 'adds a FishGame with players to games' do
+        @server.create_game_if_possible
+        expect(@server.games.map(&:players)).to include(@server.players)
       end
 
       it 'sends a ready message to each client' do
@@ -95,30 +96,43 @@ describe FishSocketServer do
   end
 
   context 'when there are two players' do
-      let(:client1) { MockFishSocketClient.new(@server.port_number) }
-      let(:client2) { MockFishSocketClient.new(@server.port_number) }
+    let(:client1) { MockFishSocketClient.new(@server.port_number) }
+    let(:client2) { MockFishSocketClient.new(@server.port_number) }
 
-      before do
-        @clients.push(client1)
-        @server.accept_new_client('Player 1')
-        @clients.push(client2)
-        @server.accept_new_client('Player 2')
-      end
+    before do
+      @clients.push(client1)
+      @server.accept_new_client('Player 1')
+      @clients.push(client2)
+      @server.accept_new_client('Player 2')
+      @game = @server.create_game_if_possible
+    end
+
     describe '#run_game' do
-      before do
-        @server.create_game_if_possible
-      end
-
-      it 'displays current hand' do
-        @server.run_game
-        expect(client1.capture_output).to include @server.players[0].hand.join(' ')
-        expect(client2.capture_output).to include @server.players[1].hand.join(' ')
-      end
-
       it 'displays winner message' do
-        @server.run_game
+        @server.run_game(@game)
         expect(client1.capture_output).to match (/win/i)
         expect(client2.capture_output).to match (/win/i)
+      end
+    end
+
+    describe '#play_round' do
+      it 'displays current player hand' do
+        @server.run_round(@game)
+        expect(client1.capture_output).to include @server.players[0].hand.map(&:rank).join(' ')
+        expect(client1.capture_output).to_not include @server.players[1].hand.map(&:rank).join(' ')
+        expect(client2.capture_output).to_not include @server.players[1].hand.map(&:rank).join(' ')
+        expect(client2.capture_output).to_not include @server.players[0].hand.map(&:rank).join(' ')
+      end
+
+      it 'asks the current player for a target' do
+        @server.run_round(@game)
+        expect(client1.capture_output).to match (/target/i)
+      end
+
+      it 'displays all opponents' do
+        @server.run_round(@game)
+        expect(client1.capture_output).to match (/Player 2/i)
+        expect(client1.capture_output).to_not match (/Player 1/i)
       end
     end
   end

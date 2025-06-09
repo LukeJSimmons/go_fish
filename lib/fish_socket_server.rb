@@ -41,9 +41,14 @@ class FishSocketServer
     game.start
   end
 
-  def run_game
-    players.each { |player| player.client.puts "Your hand is: #{player.hand.join(' ')}" }
+  def run_game(game)
     message_all_clients("win")
+  end
+
+  def run_round(game)
+    game.current_player.client.puts "Your hand is: #{game.current_player.hand.map(&:rank).join(' ')}"
+    game.current_player.client.puts "Who would you like to target?"
+    game.current_player.client.puts players.find { |player| player.name != game.current_player.name }.name
   end
 
   private
