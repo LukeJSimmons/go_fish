@@ -56,20 +56,50 @@ describe FishRoom do
   end
 
   describe '#run_round' do
-    it 'displays current player hand to their client' do
-      room.run_round
-      expect(client1.capture_output).to include "Your hand is: " + room.game.current_player.hand.map(&:rank).join(' ')
+    context 'when target and request may be assumed' do
+      before do
+        allow(room).to receive(:get_target).and_return(room.game.players[1])
+        allow(room).to receive(:get_request).and_return(room.game.current_player.hand.first)
+      end
+
+      it 'displays current player hand to their client' do
+        room.run_round
+        expect(client1.capture_output).to include "Your hand is: " + room.game.current_player.hand.map(&:rank).join(' ')
+      end
+
+      it 'asks the player for a target' do
+        room.run_round
+        expect(client1.capture_output).to match (/target/i)
+      end
+
+      it 'asks the player for a request' do
+        room.run_round
+        expect(client1.capture_output).to match (/request/i)
+      end
     end
 
-    it 'asks the player for a target' do
-      room.run_round
-      expect(client1.capture_output).to match (/target/i)
+    context 'when target may be assumed' do
+      before do
+        allow(room).to receive(:get_target).and_return(room.game.players[1])
+      end
+
+      it 'displays the request back to the player' do
+        client1.provide_input "A"
+        room.run_round
+        expect(client1.capture_output).to include "Your request is: A"
+      end
     end
 
-    it 'displays the target back to the player' do
-      client1.provide_input "Player 2"
-      room.run_round
-      expect(client1.capture_output).to include "Player 2"
+    context 'when request may be assumed' do
+      before do
+        allow(room).to receive(:get_request).and_return(room.game.current_player.hand.first)
+      end
+
+      it 'displays the target back to the player' do
+        client1.provide_input "Player 2"
+        room.run_round
+        expect(client1.capture_output).to include "Your target is: Player 2"
+      end
     end
   end
 end
