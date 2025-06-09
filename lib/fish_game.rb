@@ -49,6 +49,10 @@ class FishGame
     self.current_player, self.current_opponent = current_opponent, current_player
   end
 
+  def message_current_player(message)
+    current_player.client.puts message
+  end
+
   private
 
   def deal_base_hands

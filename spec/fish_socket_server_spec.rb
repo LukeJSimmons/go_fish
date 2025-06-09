@@ -134,6 +134,12 @@ describe FishSocketServer do
         expect(client1.capture_output).to match (/Player 2/i)
         expect(client1.capture_output).to_not match (/Player 1/i)
       end
+
+      it 'displays selected target' do
+        client1.provide_input("Player 2")
+        @server.run_round(@game)
+        expect(client1.capture_output).to include "Your target is, Player 2"
+      end
     end
   end
 end
