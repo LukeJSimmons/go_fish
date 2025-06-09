@@ -21,6 +21,10 @@ class CardDeck
     cards == other.cards
   end
 
+  def empty?
+    cards.empty?
+  end
+
   private
 
   def build_cards
