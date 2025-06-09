@@ -48,11 +48,33 @@ describe FishRoom do
     end
   end
 
-  let(:room) { FishRoom.new(@server.create_game_if_possible) }
+  let(:game) { @server.create_game_if_possible }
+  let(:clients) { {game.players.first => @server.clients.first, game.players[1] => @server.clients[1]} }
+  let(:room) { FishRoom.new(game,clients) }
   let(:current_player) { room.game.current_player }
   describe '#initialize' do
     it 'has a game' do
       expect(room).to respond_to :game
+    end
+
+    it 'has a target' do
+      expect(room).to respond_to :target
+    end
+
+    it 'has a request' do
+      expect(room).to respond_to :request
+    end
+
+    it 'has a current_player' do
+      expect(room).to respond_to :current_player
+    end
+
+    it 'has current_opponents' do
+      expect(room).to respond_to :current_opponents
+    end
+
+    it 'has clients' do
+      expect(room).to respond_to :clients
     end
   end
 
@@ -63,6 +85,7 @@ describe FishRoom do
       let(:room) {
         FishRoom.new(
           game,
+          clients,
           game.current_opponents.first.name,
           game.current_player.hand.sample.rank)
       }
@@ -103,6 +126,7 @@ describe FishRoom do
       let(:room) {
         FishRoom.new(
           game,
+          clients,
           game.current_opponents.first.name,
           game.current_player.hand.sample.rank
           )
@@ -153,6 +177,7 @@ describe FishRoom do
     let(:room) {
       FishRoom.new(
         game,
+        clients,
         game.current_opponents.first.name,
         game.current_player.hand.sample.rank
         )

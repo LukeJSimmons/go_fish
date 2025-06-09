@@ -34,7 +34,7 @@ class FishSocketServer
   def accept_new_client(player_name="Random Player")
     client = @server.accept_nonblock
     clients << client
-    players << FishPlayer.new(player_name,client)
+    players << FishPlayer.new(player_name)
     client.puts "Welcome to Go Fish!"
   end
 
@@ -44,7 +44,7 @@ class FishSocketServer
     game = FishGame.new(players)
     games << game
     game.start
-    rooms << FishRoom.new(game)
+    rooms << FishRoom.new(game,{players.first => clients.first, players[1] => clients[1]})
     game
   end
 

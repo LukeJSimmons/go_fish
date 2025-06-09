@@ -1,9 +1,10 @@
 class FishRoom
-  attr_reader :game
+  attr_reader :game, :clients
   attr_accessor :target, :request, :current_player, :current_opponents
 
-  def initialize(game, target=nil, request=nil)
+  def initialize(game, clients, target=nil, request=nil)
     @game = game
+    @clients = clients
     @target = target
     @request = request
     @current_player = game.current_player
@@ -71,11 +72,11 @@ class FishRoom
   end
 
   def message_current_player(message)
-    game.current_player.client.puts message
+    clients[current_player].puts message
   end
 
   def message_all_clients(message)
-    game.players.map(&:client).each do |client|
+    clients.each do |player, client|
       client.puts message
     end
   end
@@ -83,7 +84,7 @@ class FishRoom
   def get_current_player_input
     sleep 0.1
     begin
-      game.current_player.client.read_nonblock(1000).chomp
+      clients[current_player].read_nonblock(1000).chomp
     rescue IO::WaitReadable
     end
   end

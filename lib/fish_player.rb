@@ -1,11 +1,10 @@
 class FishPlayer
   attr_reader :hand, :name, :books, :client
 
-  def initialize(name = 'Random Player', client=nil)
+  def initialize(name = 'Random Player')
     @name = name
     @hand = []
     @books = []
-    @client = client
   end
 
   def add_cards_to_hand(cards, check_book = true)

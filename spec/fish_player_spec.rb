@@ -13,10 +13,6 @@ describe 'FishPlayer' do
       expect(player).to respond_to :books
     end
 
-    it 'has a client' do
-      expect(player).to respond_to :client
-    end
-
     it 'has a name' do
       expect(player).to respond_to :name
     end
