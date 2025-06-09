@@ -44,8 +44,19 @@ class FishSocketServer
     game = FishGame.new(players)
     games << game
     game.start
-    rooms << FishRoom.new(game,{players.first => clients.first, players[1] => clients[1]})
     game
+  end
+
+  def create_room(game)
+    room = FishRoom.new(
+      game,
+      {
+        players.first => clients.first,
+        players[1] => clients[1]
+      }
+      )
+    rooms << room
+    room
   end
 
   private
