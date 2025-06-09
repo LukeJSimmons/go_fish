@@ -34,7 +34,7 @@ describe FishRoom do
     @clients = []
     @server = FishSocketServer.new
     @server.start
-    sleep 0.1
+    sleep 0.2
     @clients.push(client1)
     @server.accept_new_client('Player 1')
     @clients.push(client2)
@@ -95,7 +95,7 @@ describe FishRoom do
 
       it 'displays results' do
         room.run_round
-        expect(client1.capture_output).to match (/took/i)
+        expect(client1.capture_output).to include "Player 1 took"
       end
     end
 

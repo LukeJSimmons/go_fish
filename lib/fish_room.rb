@@ -1,14 +1,19 @@
 class FishRoom
   attr_reader :game
-  attr_accessor :target, :request
+  attr_accessor :target, :request, :current_player, :current_opponents
 
   def initialize(game, target=nil, request=nil)
     @game = game
     @target = target
     @request = request
+    @current_player = game.current_player
+    @current_opponents = game.current_opponents
   end
 
   def run_round
+    self.current_player = game.current_player
+    self.current_opponents = game.current_opponents
+
     display_hand
     target = get_target
     request = get_request
@@ -59,9 +64,9 @@ class FishRoom
 
   def display_results(results)
     if results.is_a? Array
-      message_all_clients "You took #{'a' if results.count == 1} #{results.count} #{results.first.rank}#{'s' unless results.count == 1}"
+      message_all_clients "#{current_player.name} took #{'a' if results.count == 1} #{results.count} #{results.first.rank}#{'s' unless results.count == 1}"
     else
-      message_all_clients "Go fish: You took a #{results.rank} from the deck"
+      message_all_clients "Go fish: #{current_player.name} took a #{results.rank} from the deck"
     end
   end
 
