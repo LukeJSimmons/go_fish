@@ -41,19 +41,6 @@ class FishSocketServer
     game.start
   end
 
-  def run_game(game)
-    message_all_clients("win")
-  end
-
-  def run_round(game)
-    game.message_current_player "Your hand is: #{game.current_player.hand.map(&:rank).join(' ')}"
-    game.message_current_player "Who would you like to target?"
-    game.message_current_player players.select { |player| player.name != game.current_player.name }.map(&:name).join(' ')
-    target = get_client_input(game.current_player.client)
-    target_player = players.find { |player| player.name == target }
-    game.message_current_player "Your target is, #{target_player.name}" if target
-  end
-
   private
 
   def message_all_clients(message)
