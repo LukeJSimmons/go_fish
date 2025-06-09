@@ -3,15 +3,14 @@ require_relative 'fish_player'
 
 class FishGame
   attr_reader :deck, :players
-  attr_accessor :current_player, :current_opponent
+  attr_accessor :round
 
   BASE_HAND_SIZE = 7
 
   def initialize(players=[FishPlayer.new('Player 1'), FishPlayer.new('Player 2')])
     @deck = CardDeck.new
     @players = players
-    @current_player = players[0]
-    @current_opponent = players[1]
+    @round = 0
   end
 
   def start
@@ -20,7 +19,7 @@ class FishGame
     self
   end
 
-  def play_round(target=current_opponent, request=current_player.request_card)
+  def play_round(target=current_opponents.first, request=current_player.request_card)
     matching_cards = request ? target.get_matching_cards(request) : []
     matching_cards.each { |card| current_player.add_cards_to_hand(card) }
     
@@ -45,8 +44,12 @@ class FishGame
     players[total_books.find_index(total_books.max)]
   end
 
-  def swap_turns
-    self.current_player, self.current_opponent = current_opponent, current_player
+  def current_player
+    players[round%players.count]
+  end
+
+  def current_opponents
+    players.select { |player| player != current_player }
   end
 
   #TODO: Move to runner
@@ -65,7 +68,7 @@ class FishGame
   def go_fish(request)
     drawn_card = current_player.add_cards_to_hand(deck.draw_card)
     return unless request
-    swap_turns unless drawn_card.rank == request.rank
+    self.round += 1 unless drawn_card.rank == request.rank
     drawn_card
   end
 end

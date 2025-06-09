@@ -23,6 +23,10 @@ describe FishGame do
     it 'both players are FishPlayer objects' do
       expect(game.players.all? { |player| player.respond_to? :hand }).to eq true
     end
+
+    it 'has round' do
+      expect(game).to respond_to :round
+    end
   end
 
   describe '#start' do
@@ -44,26 +48,25 @@ describe FishGame do
     context 'when opponent does have match' do
       before do
         game.current_player.add_cards_to_hand(Card.new('A', 'H'))
-        game.current_opponent.add_cards_to_hand(Card.new('A', 'C'))
+        game.players[1].add_cards_to_hand(Card.new('A', 'C'))
       end
 
       it "adds A of C to current player's hand" do
         game.play_round
         expect(game.current_player.hand.count).to eq 2
-        expect(game.current_opponent.hand.count).to eq 0
+        expect(game.players[1].hand.count).to eq 0
       end
 
       it 'should not swap turns' do
         game.play_round
         expect(game.current_player).to eq game.players[0]
-        expect(game.current_opponent).to eq game.players[1]
       end
     end
 
     context 'when opponent does not have match' do
       before do
         game.current_player.add_cards_to_hand(Card.new('A', 'H'))
-        game.current_opponent.add_cards_to_hand(Card.new('9', 'C'))
+        game.players[1].add_cards_to_hand(Card.new('9', 'C'))
       end
       
       it 'player should draw a card' do
@@ -85,8 +88,7 @@ describe FishGame do
 
         it 'should swap turns' do
           game.play_round
-          expect(game.current_player).to eq game.players[1]
-          expect(game.current_opponent).to eq game.players[0]
+          expect(game.current_player).to_not eq game.players[0]
         end
       end
 
@@ -98,7 +100,6 @@ describe FishGame do
         it 'should not swap turns' do
           game.play_round
           expect(game.current_player).to eq game.players[0]
-          expect(game.current_opponent).to eq game.players[1]
         end
       end
     end
@@ -219,19 +220,10 @@ describe FishGame do
     it 'should return Player 1 on first round' do
       expect(game.current_player).to eq game.players.first
     end
-  end
 
-  describe '#current_opponent' do
-    it 'should return Player 2 on first round' do
-      expect(game.current_opponent).to eq game.players[1]
-    end
-  end
-
-  describe '#swap_turns' do
-    it 'swaps current player and current opponent' do
-      game.swap_turns
-      expect(game.current_player).to eq game.players[1]
-      expect(game.current_opponent).to eq game.players[0]
+    it 'should return Player 2 on second round' do
+      game.play_round
+      expect(game.current_player).to eq game.players[0]
     end
   end
 end
