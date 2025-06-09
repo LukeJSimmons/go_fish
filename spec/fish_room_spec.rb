@@ -57,20 +57,25 @@ describe FishRoom do
   end
 
   describe '#run_round' do
-    context 'when target and request may be assumed' do
+    context 'when Player 1 is current player' do
       it 'displays current player hand to their client' do
         hand = current_player.hand.map(&:rank).join(' ')
         room.run_round(room.game.current_opponents.first.name, current_player.hand.first.rank)
         expect(client1.capture_output).to include current_player.name + ", your hand is: " + hand
       end
 
-      it 'displays results' do
-        room.run_round(room.game.current_opponents.first.name, current_player.hand.first.rank)
-        expect(client1.capture_output).to match (/took/i)
+      it 'asks the player for a target' do
+        client1.provide_input "Player 2"
+        room.run_round(nil, current_player.hand.first.rank)
+        expect(client1.capture_output).to match (/target/i)
       end
-    end
 
-    context 'when target may be assumed' do
+      it 'displays the target back to the player' do
+        client1.provide_input "Player 2"
+        room.run_round(nil, current_player.hand.first.rank)
+        expect(client1.capture_output).to include "Your target is: Player 2"
+      end
+
       it 'asks the player for a request' do
         input = current_player.hand.sample
         client1.provide_input input.rank
@@ -84,19 +89,53 @@ describe FishRoom do
         room.run_round(room.game.current_opponents.first.name)
         expect(client1.capture_output).to include "Your request is: #{input.rank}"
       end
+
+      it 'displays results' do
+        room.run_round(room.game.current_opponents.first.name, current_player.hand.first.rank)
+        expect(client1.capture_output).to match (/took/i)
+      end
     end
 
-    context 'when request may be assumed' do
+    context 'when Player 2 is current player' do
+      before do
+        room.game.round = 1
+      end
+
+      it 'displays current player hand to their client' do
+        hand = current_player.hand.map(&:rank).join(' ')
+        room.run_round(room.game.current_opponents.first.name, current_player.hand.first.rank)
+        expect(client2.capture_output).to include current_player.name + ", your hand is: " + hand
+      end
+
       it 'asks the player for a target' do
-        client1.provide_input "Player 2"
+        client2.provide_input "Player 1"
         room.run_round(nil, current_player.hand.first.rank)
-        expect(client1.capture_output).to match (/target/i)
+        expect(client2.capture_output).to match (/target/i)
       end
 
       it 'displays the target back to the player' do
-        client1.provide_input "Player 2"
+        client2.provide_input "Player 1"
         room.run_round(nil, current_player.hand.first.rank)
-        expect(client1.capture_output).to include "Your target is: Player 2"
+        expect(client2.capture_output).to include "Your target is: Player 1"
+      end
+
+      it 'asks the player for a request' do
+        input = current_player.hand.sample
+        client2.provide_input input.rank
+        room.run_round(room.game.current_opponents.first.name)
+        expect(client2.capture_output).to match (/request/i)
+      end
+
+      it 'displays the request back to the player' do
+        input = current_player.hand.sample
+        client2.provide_input input.rank
+        room.run_round(room.game.current_opponents.first.name)
+        expect(client2.capture_output).to include "Your request is: #{input.rank}"
+      end
+
+      it 'displays results' do
+        room.run_round(room.game.current_opponents.first.name, current_player.hand.first.rank)
+        expect(client2.capture_output).to match (/took/i)
       end
     end
   end
