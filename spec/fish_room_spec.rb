@@ -49,6 +49,7 @@ describe FishRoom do
   end
 
   let(:room) { FishRoom.new(@server.create_game_if_possible) }
+  let(:current_player) { room.game.current_player }
   describe '#initialize' do
     it 'has a game' do
       expect(room).to respond_to :game
@@ -58,41 +59,51 @@ describe FishRoom do
   describe '#run_round' do
     context 'when target and request may be assumed' do
       before do
-        allow(room).to receive(:get_target).and_return(room.game.players[1])
-        allow(room).to receive(:get_request).and_return(room.game.current_player.hand.first)
+        allow(room).to receive(:get_target).and_return(room.game.current_opponents.first)
+        allow(room).to receive(:get_request).and_return(current_player.hand.first)
       end
 
       it 'displays current player hand to their client' do
+        hand = current_player.hand.map(&:rank).join(' ')
         room.run_round
-        expect(client1.capture_output).to include "Your hand is: " + room.game.current_player.hand.map(&:rank).join(' ')
+        expect(client1.capture_output).to include current_player.name + ", your hand is: " + hand
       end
 
-      it 'asks the player for a target' do
+      it 'displays results' do
         room.run_round
-        expect(client1.capture_output).to match (/target/i)
-      end
-
-      it 'asks the player for a request' do
-        room.run_round
-        expect(client1.capture_output).to match (/request/i)
+        expect(client1.capture_output).to match (/took/i)
       end
     end
 
     context 'when target may be assumed' do
       before do
-        allow(room).to receive(:get_target).and_return(room.game.players[1])
+        allow(room).to receive(:get_target).and_return(room.game.current_opponents.first)
+      end
+
+      it 'asks the player for a request' do
+        input = current_player.hand.sample
+        client1.provide_input input.rank
+        room.run_round
+        expect(client1.capture_output).to match (/request/i)
       end
 
       it 'displays the request back to the player' do
-        client1.provide_input "A"
+        input = current_player.hand.sample
+        client1.provide_input input.rank
         room.run_round
-        expect(client1.capture_output).to include "Your request is: A"
+        expect(client1.capture_output).to include "Your request is: #{input.rank}"
       end
     end
 
     context 'when request may be assumed' do
       before do
-        allow(room).to receive(:get_request).and_return(room.game.current_player.hand.first)
+        allow(room).to receive(:get_request).and_return(current_player.hand.first)
+      end
+
+      it 'asks the player for a target' do
+        client1.provide_input "Player 2"
+        room.run_round
+        expect(client1.capture_output).to match (/target/i)
       end
 
       it 'displays the target back to the player' do

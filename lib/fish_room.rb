@@ -8,27 +8,45 @@ class FishRoom
   def run_round
     display_hand
     target = get_target
-    message_current_player "Your target is: " + target.name
     request = get_request
-    message_current_player "Your request is: " + request.rank
+    results = game.play_round(target, request)
+    display_results(results)
   end
 
   private
 
   def display_hand
-    message_current_player "Your hand is: " + game.current_player.hand.map(&:rank).join(' ')
+    message_current_player "#{game.current_player.name}, your hand is: " + game.current_player.hand.map(&:rank).join(' ')
   end
 
   def get_target
     message_current_player "Please input your target: "
     input = get_current_player_input
-    game.players.find { |player| player.name == input }
+    target = game.players.find { |player| player.name == input }
+
+    get_target unless target
+
+    message_current_player "Your target is: " + target.name
+    target
   end
 
   def get_request
     message_current_player "Please input your request: "
     input = get_current_player_input
-    game.current_player.hand.find { |card| card.rank == input }
+    request = game.current_player.hand.find { |card| card.rank == input }
+    
+    get_request unless request
+
+    message_current_player "Your request is: " + request.rank
+    request
+  end
+
+  def display_results(results)
+    if results.is_a? Array
+      message_current_player "You took #{'a' if results.count == 1} #{results.count} #{results.first.rank}#{'s' unless results.count == 1}"
+    else
+      message_current_player "Go fish: You took a #{results} from the deck"
+    end
   end
 
   def message_current_player(message)
