@@ -78,8 +78,8 @@ class FishSocketServer
 
   def get_name_input(client)
     client.puts "Please input your name:"
-    name = get_client_input(client)
-    get_name_input(client) unless name
+    name = nil
+    name = get_client_input(client) until name
     name
   end
 end
