@@ -1,6 +1,7 @@
-require 'fish_game'
-require 'fish_player'
-require 'fish_room'
+require 'socket'
+require_relative 'fish_game'
+require_relative 'fish_player'
+require_relative 'fish_room'
 
 class FishSocketServer
   def port_number
@@ -36,6 +37,7 @@ class FishSocketServer
     clients << client
     players << FishPlayer.new(player_name)
     client.puts "Welcome to Go Fish!"
+  rescue IO::WaitReadable, Errno::EINTR
   end
 
   def create_game_if_possible
