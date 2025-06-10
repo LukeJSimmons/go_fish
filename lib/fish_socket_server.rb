@@ -23,7 +23,7 @@ class FishSocketServer
   def rooms
     @rooms ||= []
   end
-  
+
   def start
     @server = TCPServer.new(port_number)
   end
@@ -32,9 +32,9 @@ class FishSocketServer
     @server.close if @server
   end
 
-  def accept_new_client(player_name=nil)
+  def accept_new_client(player_name = nil)
     client = @server.accept_nonblock
-    player_name = get_name_input(client) unless player_name
+    player_name ||= get_name_input(client)
     clients << client
     players << FishPlayer.new(player_name)
     client.puts "Welcome to Go Fish #{player_name}!"
@@ -43,6 +43,7 @@ class FishSocketServer
 
   def create_game_if_possible
     return unless players.count == 2
+
     message_all_clients("All players have joined. We're ready to play!")
     game = FishGame.new(players)
     games << game
@@ -57,7 +58,7 @@ class FishSocketServer
         players.first => clients.first,
         players[1] => clients[1]
       }
-      )
+    )
     rooms << room
     room
   end
@@ -77,7 +78,7 @@ class FishSocketServer
   end
 
   def get_name_input(client)
-    client.puts "Please input your name:"
+    client.puts 'Please input your name:'
     name = nil
     name = get_client_input(client) until name
     name

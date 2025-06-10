@@ -2,7 +2,7 @@ class FishRoom
   attr_reader :game, :clients
   attr_accessor :target, :request, :current_player, :current_opponents
 
-  def initialize(game, clients, target=nil, request=nil)
+  def initialize(game, clients, target = nil, request = nil)
     @game = game
     @clients = clients
     @target = target
@@ -15,8 +15,6 @@ class FishRoom
     self.current_player = game.current_player
     self.current_opponents = game.current_opponents
 
-    current_opponents.each { |opponent| clients[opponent].puts "Waiting for #{current_player.name} to finish their turn..." }
-
     display_hand
     target = get_target
     request = get_request
@@ -27,42 +25,42 @@ class FishRoom
 
   def run_game
     run_round until game.deck.empty? || game.players.any? { |player| player.hand.empty? }
-    message_all_clients game.determine_winner.name + " Wins"
+    message_all_clients game.determine_winner.name + ' Wins'
     game.determine_winner
   end
 
   private
 
   def display_hand
+    current_opponents.each do |opponent|
+      clients[opponent].puts "Waiting for #{current_player.name} to finish their turn..."
+    end
     message_current_player "#{game.current_player.name}, your hand is: " + game.current_player.hand.map(&:rank).sort.join(' ')
   end
 
-  def get_target
-    message_current_player "Your opponents are, #{current_opponents.map(&:name).join(' ')}"
-    message_current_player "Please input your target: "
-    if target
-      target = game.current_opponents.first.name
-    end
-    input = nil
-    input = target || get_current_player_input until input
-    target = game.players.find { |player| player.name == input }
+  def get_target # OVER 7-LINES : 10-LINES
+    message_current_player "Who would you like to target? Your opponents are, #{current_opponents.map(&:name).join(' ')}:"
 
-    return get_target unless target
+    target = game.current_opponents.first if target
+
+    until target
+      input = target || get_current_player_input
+      target = game.players.find { |player| player.name == input }
+    end
 
     message_current_player target.name
     target
   end
 
-  def get_request
-    message_current_player "Please input your request: "
-    if request
-      request = game.current_player.hand.sample.rank
-    end
-    input = nil
-    input = request || get_current_player_input until input
-    request = game.current_player.hand.find { |card| card.rank == input }
+  def get_request # OVER 7-LINES : 10-LINES
+    message_current_player 'Please input your request: '
 
-    return get_request unless request
+    request = game.current_player.hand.sample if request
+
+    until request
+      input = request || get_current_player_input until input
+      request = game.current_player.hand.find { |card| card.rank == input }
+    end
 
     message_current_player request.rank
     request
@@ -70,9 +68,14 @@ class FishRoom
 
   def display_results(results)
     if results.is_a? Array
-      message_all_clients "#{current_player.name} took #{'a' if results.count == 1} #{results.count} #{results.first.rank}#{'s' unless results.count == 1}"
+      message_all_clients "#{current_player.name} took #{if results.count == 1
+                                                           'a'
+                                                         end} #{results.count} #{results.first.rank}#{unless results.count == 1
+                                                                                                        's'
+                                                                                                      end}"
     else
-      message_all_clients "Go fish: #{current_player.name} took a #{results.rank} from the deck"
+      message_all_clients "Go fish, #{current_player.name} took nothing"
+      message_current_player "You took a #{results.rank} from the deck"
     end
   end
 
@@ -81,7 +84,7 @@ class FishRoom
   end
 
   def message_all_clients(message)
-    clients.each do |player, client|
+    clients.each do |_player, client|
       client.puts message
     end
   end

@@ -14,11 +14,11 @@ class MockFishSocketClient
     @socket.puts(text)
   end
 
-  def capture_output(delay=0.1)
+  def capture_output(delay = 0.1)
     sleep(delay)
     @output = @socket.read_nonblock(1000)
   rescue IO::WaitReadable
-    @output = ""
+    @output = ''
   end
 
   def close
@@ -30,7 +30,7 @@ describe FishRoom do
   let(:client1) { MockFishSocketClient.new(@server.port_number) }
   let(:client2) { MockFishSocketClient.new(@server.port_number) }
 
-  before(:each) do
+  before(:each) do # OVER 7-LINES
     @clients = []
     @server = FishSocketServer.new
     @server.start
@@ -49,8 +49,8 @@ describe FishRoom do
   end
 
   let(:game) { @server.create_game_if_possible }
-  let(:clients) { {game.players.first => @server.clients.first, game.players[1] => @server.clients[1]} }
-  let(:room) { FishRoom.new(game,clients) }
+  let(:clients) { { game.players.first => @server.clients.first, game.players[1] => @server.clients[1] } }
+  let(:room) { FishRoom.new(game, clients) }
   let(:current_player) { room.game.current_player }
   describe '#initialize' do
     it 'has a game' do
@@ -79,104 +79,112 @@ describe FishRoom do
   end
 
   describe '#run_round' do
-  let(:game) { @server.create_game_if_possible }
+    let(:game) { @server.create_game_if_possible }
 
     context 'when Player 1 is current player' do
-      let(:room) {
+      let(:room) do
         FishRoom.new(
           game,
           clients,
-          game.current_opponents.first.name,
-          game.current_player.hand.sample.rank)
-      }
+          game.current_opponents.first,
+          game.current_player.hand.sample
+        )
+      end
 
       it 'displays waiting message to current opponents' do
         room.run_round
-        expect(client2.capture_output).to match (/waiting/i)
+        expect(client2.capture_output).to match(/waiting/i)
       end
 
       it 'displays current player hand sorted to their client' do
         hand = current_player.hand.map(&:rank).sort.join(' ')
         room.run_round
-        expect(client1.capture_output).to include current_player.name + ", your hand is: " + hand
+        expect(client1.capture_output).to include current_player.name + ', your hand is: ' + hand
       end
 
       it 'asks the player for a target' do
         room.run_round
-        expect(client1.capture_output).to match (/target/i)
+        expect(client1.capture_output).to match(/target/i)
       end
 
       it 'displays possible targets to player' do
         room.run_round
-        expect(client1.capture_output).to include "Your opponents are, " + room.current_opponents.map(&:name).join(' ')
+        expect(client1.capture_output).to include 'Your opponents are, ' + room.current_opponents.map(&:name).join(' ')
       end
 
       it 'displays the target back to the player' do
         room.run_round
-        expect(client1.capture_output).to include "Player 2"
+        expect(client1.capture_output).to include 'Player 2'
       end
 
       it 'asks the player for a request' do
         room.run_round
-        expect(client1.capture_output).to match (/request/i)
+        expect(client1.capture_output).to match(/request/i)
       end
 
       it 'displays the request back to the player' do
         room.run_round
-        expect(client1.capture_output).to include "#{room.request}"
+        expect(client1.capture_output).to include "#{room.request.rank}"
       end
 
-      it 'displays results' do
+      it 'displays results to all players' do
         room.run_round
-        expect(client1.capture_output).to include "Player 1 took"
+        expect(client1.capture_output).to include 'Player 1 took'
+        expect(client2.capture_output).to include 'Player 1 took'
+      end
+
+      it 'does not display drawn to all players' do
+        room.run_round
+        expect(client1.capture_output).to include 'You took'
+        expect(client2.capture_output).to_not include 'You took'
       end
     end
 
     context 'when Player 2 is current player' do
-      let(:room) {
+      let(:room) do
         FishRoom.new(
           game,
           clients,
-          game.current_opponents.first.name,
-          game.current_player.hand.sample.rank
-          )
-        }
-      
+          game.current_opponents.first,
+          game.current_player.hand.sample
+        )
+      end
+
       before do
         room.game.round = 1
-        room.target = game.current_opponents.first.name
-        room.request = room.game.current_player.hand.sample.rank
+        room.target = game.current_opponents.first
+        room.request = room.game.current_player.hand.sample
       end
 
       it 'displays current player hand to their client' do
         hand = current_player.hand.map(&:rank).sort.join(' ')
         room.run_round
-        expect(client2.capture_output).to include current_player.name + ", your hand is: " + hand
+        expect(client2.capture_output).to include current_player.name + ', your hand is: ' + hand
       end
 
       it 'asks the player for a target' do
         room.run_round
-        expect(client2.capture_output).to match (/target/i)
+        expect(client2.capture_output).to match(/target/i)
       end
 
       it 'displays the target back to the player' do
         room.run_round
-        expect(client2.capture_output).to include "Player 1"
+        expect(client2.capture_output).to include 'Player 1'
       end
 
       it 'asks the player for a request' do
         room.run_round
-        expect(client2.capture_output).to match (/request/i)
+        expect(client2.capture_output).to match(/request/i)
       end
 
       it 'displays the request back to the player' do
         room.run_round
-        expect(client2.capture_output).to include "#{room.request}"
+        expect(client2.capture_output).to include "#{room.request.rank}"
       end
 
       it 'displays results' do
         room.run_round
-        expect(client2.capture_output).to match (/took/i)
+        expect(client2.capture_output).to match(/took/i)
       end
     end
   end
@@ -184,14 +192,14 @@ describe FishRoom do
   describe '#run_game' do
     let(:game) { @server.create_game_if_possible }
 
-    let(:room) {
+    let(:room) do
       FishRoom.new(
         game,
         clients,
-        game.current_opponents.first.name,
-        game.current_player.hand.sample.rank
-        )
-      }
+        game.current_opponents.first,
+        game.current_player.hand.sample
+      )
+    end
 
     it 'displays winner' do
       expect(room.run_game).to respond_to :hand

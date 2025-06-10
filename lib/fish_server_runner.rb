@@ -10,6 +10,6 @@ loop do
     room = server.create_room(game)
     room.run_game
   end
-rescue
+rescue StandardError
   server.stop
 end

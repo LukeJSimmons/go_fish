@@ -32,7 +32,7 @@ class FishPlayer
   end
 
   def get_book
-    hand.group_by(&:rank).select { |rank, cards| cards.count == 4 }.first&.last || []
+    hand.group_by(&:rank).select { |_rank, cards| cards.count == 4 }.first&.last || []
   end
 
   private
