@@ -90,6 +90,11 @@ describe FishRoom do
           game.current_player.hand.sample.rank)
       }
 
+      it 'displays waiting message to current opponents' do
+        room.run_round
+        expect(client2.capture_output).to match (/waiting/i)
+      end
+
       it 'displays current player hand to their client' do
         hand = current_player.hand.map(&:rank).join(' ')
         room.run_round
@@ -99,6 +104,11 @@ describe FishRoom do
       it 'asks the player for a target' do
         room.run_round
         expect(client1.capture_output).to match (/target/i)
+      end
+
+      it 'displays possible targets to player' do
+        room.run_round
+        expect(client1.capture_output).to include "Your opponents are, " + room.current_opponents.map(&:name).join(' ')
       end
 
       it 'displays the target back to the player' do

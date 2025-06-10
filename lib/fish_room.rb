@@ -15,6 +15,8 @@ class FishRoom
     self.current_player = game.current_player
     self.current_opponents = game.current_opponents
 
+    current_opponents.each { |opponent| clients[opponent].puts "Waiting for #{current_player.name} to finish their turn..." }
+
     display_hand
     target = get_target
     request = get_request
@@ -36,14 +38,16 @@ class FishRoom
   end
 
   def get_target
+    message_current_player "Your opponents are, #{current_opponents.map(&:name).join(' ')}"
     message_current_player "Please input your target: "
     if target
       target = game.current_opponents.first.name
     end
-    input = target || get_current_player_input
+    input = nil
+    input = target || get_current_player_input until input
     target = game.players.find { |player| player.name == input }
 
-    get_target unless target
+    return get_target unless target
 
     message_current_player target.name
     target
@@ -54,10 +58,11 @@ class FishRoom
     if request
       request = game.current_player.hand.sample.rank
     end
-    input = request || get_current_player_input
+    input = nil
+    input = request || get_current_player_input until input
     request = game.current_player.hand.find { |card| card.rank == input }
-    
-    get_request unless request
+
+    return get_request unless request
 
     message_current_player request.rank
     request
