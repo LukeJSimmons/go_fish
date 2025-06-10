@@ -34,7 +34,7 @@ describe FishRoom do
     @clients = []
     @server = FishSocketServer.new
     @server.start
-    sleep 0.2
+    sleep 0.1
     @clients.push(client1)
     @server.accept_new_client('Player 1')
     @clients.push(client2)
@@ -95,8 +95,8 @@ describe FishRoom do
         expect(client2.capture_output).to match (/waiting/i)
       end
 
-      it 'displays current player hand to their client' do
-        hand = current_player.hand.map(&:rank).join(' ')
+      it 'displays current player hand sorted to their client' do
+        hand = current_player.hand.map(&:rank).sort.join(' ')
         room.run_round
         expect(client1.capture_output).to include current_player.name + ", your hand is: " + hand
       end
@@ -149,7 +149,7 @@ describe FishRoom do
       end
 
       it 'displays current player hand to their client' do
-        hand = current_player.hand.map(&:rank).join(' ')
+        hand = current_player.hand.map(&:rank).sort.join(' ')
         room.run_round
         expect(client2.capture_output).to include current_player.name + ", your hand is: " + hand
       end

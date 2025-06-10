@@ -34,7 +34,7 @@ class FishRoom
   private
 
   def display_hand
-    message_current_player "#{game.current_player.name}, your hand is: " + game.current_player.hand.map(&:rank).join(' ')
+    message_current_player "#{game.current_player.name}, your hand is: " + game.current_player.hand.map(&:rank).sort.join(' ')
   end
 
   def get_target
