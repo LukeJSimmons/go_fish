@@ -18,5 +18,9 @@ describe RoundResult do
     it 'has fished' do
       expect(result).to respond_to :fished
     end
+
+    it 'has requested_rank' do
+      expect(result).to respond_to :requested_rank
+    end
   end
 end
