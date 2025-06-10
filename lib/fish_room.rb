@@ -27,7 +27,7 @@ class FishRoom
   end
 
   def get_target
-    message_current_player "Who would you like to target? Your opponents are, #{current_opponents.map(&:name).join(' ')}:" if request_target_message
+    message_current_player "Who would you like to target? Your opponents are, #{game.current_opponents.map(&:name).join(' ')}:" if request_target_message
     self.request_target_message = false
 
     target_name_input = get_current_player_input
@@ -51,14 +51,14 @@ class FishRoom
   private
 
   def display_hand
-    current_opponents.each do |opponent|
-      clients[opponent].puts "Waiting for #{current_player.name} to finish their turn..."
+    game.current_opponents.each do |opponent|
+      clients[opponent].puts "Waiting for #{game.current_player.name} to finish their turn..."
     end
     message_current_player "#{game.current_player.name}, your hand is: " + game.current_player.hand.map(&:rank).sort.join(' ')
   end
 
   def message_current_player(message)
-    clients[current_player].puts message
+    clients[game.current_player].puts message
   end
 
   def message_all_clients(message)
@@ -69,13 +69,13 @@ class FishRoom
 
   def display_results(results)
     if results.is_a? Array
-      message_all_clients "#{current_player.name} took #{if results.count == 1
+      message_all_clients "#{game.current_player.name} took #{if results.count == 1
                                                            'a'
                                                          end} #{results.count} #{results.first.rank}#{unless results.count == 1
                                                                                                         's'
                                                                                                       end}"
     else
-      message_all_clients "Go fish, #{current_player.name} took nothing"
+      message_all_clients "Go fish, #{game.current_player.name} took nothing"
       message_current_player "You took a #{results.rank} from the deck"
     end
   end
@@ -83,7 +83,7 @@ class FishRoom
   def get_current_player_input
     sleep 0.1
     begin
-      clients[current_player].read_nonblock(1000).chomp
+      clients[game.current_player].read_nonblock(1000).chomp
     rescue IO::WaitReadable
     end
   end

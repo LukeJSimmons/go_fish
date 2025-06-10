@@ -52,6 +52,7 @@ describe FishRoom do
   let(:clients) { { game.players.first => @server.clients.first, game.players[1] => @server.clients[1] } }
   let(:room) { FishRoom.new(game, clients) }
   let(:current_player) { game.current_player }
+  
   describe '#initialize' do
     it 'has a game' do
       expect(room).to respond_to :game
@@ -147,7 +148,7 @@ describe FishRoom do
 
       it 'displays possible targets to player' do
         room.get_target
-        expect(client1.capture_output).to include 'Your opponents are, ' + room.current_opponents.map(&:name).join(' ')
+        expect(client1.capture_output).to include 'Your opponents are, ' + room.game.current_opponents.map(&:name).join(' ')
       end
 
       it 'displays the target back to the player' do
@@ -169,7 +170,7 @@ describe FishRoom do
 
       it 'displays possible targets to player' do
         room.get_target
-        expect(client2.capture_output).to include 'Your opponents are, ' + room.current_opponents.map(&:name).join(' ')
+        expect(client2.capture_output).to include 'Your opponents are, ' + room.game.current_opponents.map(&:name).join(' ')
       end
 
       it 'displays the target back to the player' do
@@ -180,7 +181,7 @@ describe FishRoom do
   end
 
   describe '#get_rank' do
-    let(:rank) { room.current_player.hand.sample.rank }
+    let(:rank) { room.game.current_player.hand.sample.rank }
 
     context 'when Player 1 is current_player' do
       before do
