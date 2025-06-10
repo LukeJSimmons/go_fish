@@ -33,7 +33,7 @@ class FishRoom
     target_name_input = get_current_player_input
     target_player = game.players.find { |player| player.name == target_name_input && player != current_player }
 
-
+    message_current_player target_name_input
     target_player
   end
 
@@ -44,7 +44,7 @@ class FishRoom
     rank_input = get_current_player_input
     rank_card = game.current_player.hand.find { |card| card.rank == rank_input }
 
-
+    message_current_player rank_input
     rank_card
   end
 
