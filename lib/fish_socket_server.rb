@@ -32,11 +32,12 @@ class FishSocketServer
     @server.close if @server
   end
 
-  def accept_new_client(player_name="Random Player")
+  def accept_new_client(player_name=nil)
     client = @server.accept_nonblock
+    player_name = get_name_input(client) unless player_name
     clients << client
     players << FishPlayer.new(player_name)
-    client.puts "Welcome to Go Fish!"
+    client.puts "Welcome to Go Fish #{player_name}!"
   rescue IO::WaitReadable, Errno::EINTR
   end
 
@@ -73,5 +74,12 @@ class FishSocketServer
       client.read_nonblock(1000).chomp
     rescue IO::WaitReadable
     end
+  end
+
+  def get_name_input(client)
+    client.puts "Please input your name:"
+    name = get_client_input(client)
+    get_name_input(client) unless name
+    name
   end
 end

@@ -49,10 +49,22 @@ describe FishSocketServer do
 
     before do
       @clients.push(client1)
-      @server.accept_new_client('Player 1')
+    end
+
+    it 'asks for client player name' do
+      client1.provide_input("jim")
+      @server.accept_new_client
+      expect(client1.capture_output).to match (/name/i)
+    end
+
+    it 'sends input name back to the client' do
+      client1.provide_input("jim")
+      @server.accept_new_client
+      expect(client1.capture_output).to match (/jim/i)
     end
 
     it 'sends a welcome message to client' do
+      @server.accept_new_client('Player 1')
       expect(client1.capture_output).to match (/welcome/i)
     end
   end
