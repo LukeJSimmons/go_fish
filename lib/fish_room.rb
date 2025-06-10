@@ -13,11 +13,11 @@ class FishRoom
 
   def run_round
     display_hand
-    self.target = get_target unless target
-    self.rank = get_rank unless rank
-    results = game.play_round unless target && rank
+    self.target = get_target if !target
+    self.rank = get_rank if !rank && target
+    results = game.play_round if target && rank
 
-    display_results(results) unless results
+    display_results(results) if results
   end
 
   def run_game
@@ -33,7 +33,7 @@ class FishRoom
     target_name_input = get_current_player_input
     target_player = game.players.find { |player| player.name == target_name_input && player != current_player }
 
-    message_current_player target_name_input
+    message_current_player target_name_input if target_name_input
     target_player
   end
 
@@ -44,7 +44,7 @@ class FishRoom
     rank_input = get_current_player_input
     rank_card = game.current_player.hand.find { |card| card.rank == rank_input }
 
-    message_current_player rank_input
+    message_current_player rank_input if rank_input
     rank_card
   end
 

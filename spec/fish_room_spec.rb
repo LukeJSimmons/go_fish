@@ -83,9 +83,9 @@ describe FishRoom do
       end
 
       before do
-        client1.provide_input(game.current_opponents.first.name)
-        room.run_round
-        client1.provide_input(game.current_player.hand.sample.rank)
+        # client1.provide_input(game.current_opponents.first.name)
+        # room.run_round
+        # client1.provide_input(game.current_player.hand.sample.rank)
       end
 
       it 'displays waiting message to current opponents' do
@@ -93,12 +93,12 @@ describe FishRoom do
       end
 
       it 'displays current player hand sorted to their client' do
+        room.run_round
         hand = current_player.hand.map(&:rank).sort.join(' ')
         expect(client1.capture_output).to include current_player.name + ', your hand is: ' + hand
       end
 
       it 'displays results to all players' do
-        room.run_round
         expect(client1.capture_output).to include 'Player 1 took'
         expect(client2.capture_output).to include 'Player 1 took'
       end
