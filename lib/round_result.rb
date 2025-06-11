@@ -1,7 +1,7 @@
 class RoundResult
   attr_reader :current_player, :target_player, :cards, :fished, :requested_rank
 
-  def initialize
+  def initialize(current_player, target_player, cards, fished, requested_rank)
     @current_player = current_player
     @target_player = target_player
     @cards = cards

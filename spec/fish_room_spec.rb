@@ -34,7 +34,7 @@ describe FishRoom do
     @clients = []
     @server = FishSocketServer.new
     @server.start
-    sleep 0.1
+    sleep 0.2
     @clients.push(client1)
     @server.accept_new_client('Player 1')
     @clients.push(client2)
@@ -238,6 +238,9 @@ describe FishRoom do
     end
 
     xit 'displays winner' do
+      client2.provide_input(game.current_opponents.first.name)
+      room.run_round
+      client2.provide_input(game.current_player.hand.sample.rank)
       expect(room.run_game).to respond_to :hand
     end
   end

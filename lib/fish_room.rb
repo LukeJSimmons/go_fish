@@ -1,6 +1,6 @@
 class FishRoom
   attr_reader :game, :clients
-  attr_accessor :target, :rank, :current_player, :current_opponents, :request_target_message, :request_rank_message
+  attr_accessor :target, :rank, :current_player, :current_opponents, :request_target_message, :request_rank_message, :results
 
   def initialize(game, clients)
     @game = game
@@ -9,13 +9,20 @@ class FishRoom
     @target = nil
     @request_rank_message = true
     @rank = nil
+    @results = nil
   end
 
   def run_round
     display_hand
     self.target = get_target if !target
     self.rank = get_rank if !rank && target
-    results = game.play_round if target && rank
+    self.results = RoundResult.new(
+      game.current_player,
+      target,
+      game.play_round,
+      false,
+      rank
+    ) if target && rank && !results
 
     display_results(results) if results
   end
@@ -68,15 +75,11 @@ class FishRoom
   end
 
   def display_results(results)
-    if results.is_a? Array
-      message_all_clients "#{game.current_player.name} took #{if results.count == 1
-                                                           'a'
-                                                         end} #{results.count} #{results.first.rank}#{unless results.count == 1
-                                                                                                        's'
-                                                                                                      end}"
+    if results.cards.is_a? Array
+      message_all_clients "#{results.current_player.name} took #{'a' if results.cards.count == 1} #{results.cards.count} #{results.cards.first.rank}#{'s' unless results.cards.count == 1} from #{results.target_player}"
     else
-      message_all_clients "Go fish, #{game.current_player.name} took nothing"
-      message_current_player "You took a #{results.rank} from the deck"
+      message_all_clients "Go fish, #{results.current_player.name} took nothing"
+      clients[results.current_player].puts "You took a #{results.requested_rank} from the deck"
     end
   end
 
