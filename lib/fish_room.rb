@@ -1,6 +1,6 @@
 class FishRoom
   attr_reader :game, :clients
-  attr_accessor :target, :rank, :current_player, :current_opponents, :request_target_message, :request_rank_message, :results
+  attr_accessor :target, :requested_card, :current_player, :current_opponents, :request_target_message, :request_rank_message, :results
 
   def initialize(game, clients)
     @game = game
@@ -8,21 +8,21 @@ class FishRoom
     @request_target_message = true
     @target = nil
     @request_rank_message = true
-    @rank = nil
+    @requested_card = nil
     @results = nil
   end
 
   def run_round
     display_hand
     self.target = get_target if !target
-    self.rank = get_rank if !rank && target
+    self.requested_card = get_requested_card if !requested_card && target
     self.results = RoundResult.new(
       game.current_player,
       target,
-      game.play_round,
+      game.play_round(target, requested_card),
       false,
-      rank
-    ) if target && rank && !results
+      requested_card
+    ) if target && requested_card && !results
 
     display_results(results) if results
   end
@@ -44,7 +44,7 @@ class FishRoom
     target_player
   end
 
-  def get_rank
+  def get_requested_card
     message_current_player "Please input your rank: " if request_rank_message
     self.request_rank_message = false
 
@@ -79,7 +79,7 @@ class FishRoom
       message_all_clients "#{results.current_player.name} took #{'a' if results.cards.count == 1} #{results.cards.count} #{results.cards.first.rank}#{'s' unless results.cards.count == 1} from #{results.target_player}"
     else
       message_all_clients "Go fish, #{results.current_player.name} took nothing"
-      clients[results.current_player].puts "You took a #{results.requested_rank} from the deck"
+      clients[results.current_player].puts "You took a #{results.requested_card} from the deck"
     end
   end
 

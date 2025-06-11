@@ -1,5 +1,6 @@
 require_relative 'card_deck'
 require_relative 'fish_player'
+require_relative 'round_result'
 
 class FishGame
   attr_reader :deck, :players
@@ -19,13 +20,13 @@ class FishGame
     self
   end
 
-  def play_round(target, request)
-    matching_cards = request ? target.get_matching_cards(request) : []
+  def play_round(target, requested_card)
+    matching_cards = requested_card ? target.get_matching_cards(requested_card) : []
     matching_cards.each { |card| current_player.add_cards_to_hand(card) }
 
     return matching_cards unless matching_cards.empty?
 
-    go_fish(request)
+    go_fish(requested_card)
   end
 
   def determine_winner
@@ -55,11 +56,11 @@ class FishGame
     end
   end
 
-  def go_fish(request)
+  def go_fish(requested_card)
     drawn_card = current_player.add_cards_to_hand(deck.draw_card)
-    return unless request
+    return unless requested_card
 
-    self.round += 1 unless drawn_card.rank == request.rank
+    self.round += 1 unless drawn_card.rank == requested_card.rank
     drawn_card
   end
 end
