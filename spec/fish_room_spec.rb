@@ -49,7 +49,12 @@ describe FishRoom do
   end
 
   let(:game) { @server.create_game_if_possible }
-  let(:clients) { { game.players.first => @server.clients.first, game.players[1] => @server.clients[1] } }
+  let(:clients) {
+    {
+      game.players.first => @server.clients.first,
+      game.players[1] => @server.clients[1]
+    }
+  }
   let(:room) { FishRoom.new(game, clients) }
   let(:current_player) { game.current_player }
   
@@ -82,13 +87,8 @@ describe FishRoom do
         )
       end
 
-      before do
-        # client1.provide_input(game.current_opponents.first.name)
-        # room.run_round
-        # client1.provide_input(game.current_player.hand.sample.rank)
-      end
-
       it 'displays waiting message to current opponents' do
+        room.run_round
         expect(client2.capture_output).to match(/waiting/i)
       end
 
@@ -99,11 +99,18 @@ describe FishRoom do
       end
 
       it 'displays results to all players' do
+        client1.provide_input(game.current_opponents.first.name)
+        room.run_round
+        client1.provide_input(game.current_player.hand.sample.rank)
+        room.run_round
         expect(client1.capture_output).to include 'Player 1 took'
         expect(client2.capture_output).to include 'Player 1 took'
       end
 
       it 'does not display drawn to all players' do
+        client1.provide_input(game.current_opponents.first.name)
+        room.run_round
+        client1.provide_input(game.current_player.hand.sample.rank)
         room.run_round
         expect(client1.capture_output).to include 'You took'
         expect(client2.capture_output).to_not include 'You took'
@@ -129,8 +136,11 @@ describe FishRoom do
       end
 
       it 'displays results' do
+        client2.provide_input(game.current_opponents.first.name)
         room.run_round
-        expect(client2.capture_output).to match(/took/i)
+        client2.provide_input(game.current_player.hand.sample.rank)
+        room.run_round
+        expect(client2.capture_output).to include 'Player 2 took'
       end
     end
   end
