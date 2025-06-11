@@ -45,6 +45,9 @@ describe FishGame do
   end
 
   describe '#play_round' do
+    let(:default_target) { game.current_opponents.first }
+    let(:default_rank) { game.current_player.request_card }
+
     context 'when opponent does have match' do
       before do
         game.current_player.add_cards_to_hand(Card.new('A', 'H'))
@@ -52,13 +55,13 @@ describe FishGame do
       end
 
       it "adds A of C to current player's hand" do
-        game.play_round
+        game.play_round(default_target, default_rank)
         expect(game.current_player.hand.count).to eq 2
         expect(game.players[1].hand.count).to eq 0
       end
 
       it 'should not swap turns' do
-        game.play_round
+        game.play_round(default_target, default_rank)
         expect(game.current_player).to eq game.players[0]
       end
     end
@@ -71,13 +74,13 @@ describe FishGame do
 
       it 'player should draw a card' do
         expect do
-          game.play_round
+          game.play_round(default_target, default_rank)
         end.to change(game.current_player.hand, :count).by 1
       end
 
       it 'removes a card from the deck' do
         expect do
-          game.play_round
+          game.play_round(default_target, default_rank)
         end.to change(game.deck.cards, :count).by(-1)
       end
 
@@ -87,7 +90,7 @@ describe FishGame do
         end
 
         it 'should swap turns' do
-          game.play_round
+          game.play_round(default_target, default_rank)
           expect(game.current_player).to_not eq game.players[0]
         end
       end
@@ -98,41 +101,9 @@ describe FishGame do
         end
 
         it 'should not swap turns' do
-          game.play_round
+          game.play_round(default_target, default_rank)
           expect(game.current_player).to eq game.players[0]
         end
-      end
-    end
-  end
-
-  describe '#play_game' do
-    it 'plays until the deck is empty' do
-      game.start
-      game.play_game
-      expect(game.deck.cards.count).to eq 0
-    end
-
-    context 'when player 1 wins' do
-      before do
-        50.times do
-          game.players.first.add_cards_to_hand(game.deck.draw_card)
-        end
-      end
-
-      it 'returns the game winner' do
-        expect(game.play_game).to eq game.players.first
-      end
-    end
-
-    context 'when player 1 wins' do
-      before do
-        50.times do
-          game.players[1].add_cards_to_hand(game.deck.draw_card)
-        end
-      end
-
-      it 'returns the game winner' do
-        expect(game.play_game).to eq game.players[1]
       end
     end
   end
@@ -217,12 +188,15 @@ describe FishGame do
   end
 
   describe '#current_player' do
+    let(:default_target) { game.current_opponents.first }
+    let(:default_rank) { game.current_player.request_card }
+    
     it 'should return Player 1 on first round' do
       expect(game.current_player).to eq game.players.first
     end
 
     it 'should return Player 2 on second round' do
-      game.play_round
+      game.play_round(default_target, default_rank)
       expect(game.current_player).to eq game.players[0]
     end
   end

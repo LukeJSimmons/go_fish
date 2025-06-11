@@ -19,18 +19,13 @@ class FishGame
     self
   end
 
-  def play_round(target = current_opponents.first, request = current_player.request_card)
+  def play_round(target, request)
     matching_cards = request ? target.get_matching_cards(request) : []
     matching_cards.each { |card| current_player.add_cards_to_hand(card) }
 
     return matching_cards unless matching_cards.empty?
 
     go_fish(request)
-  end
-
-  def play_game
-    play_round until deck.cards.empty?
-    determine_winner
   end
 
   def determine_winner
